@@ -1,7 +1,7 @@
 package org.cnam.jbrasserie.beans;
 
 public class Beer {
-	private Integer id; // AUTO GENERATED
+	private Integer idBeer; // AUTO GENERATED
 	private String name;
 	private String brewer;
 	private String style;
@@ -10,7 +10,11 @@ public class Beer {
 	private int stock;
 	
 	public Integer getId() {
-		return id;
+		return idBeer;
+	}
+	
+	public void setId(Integer id) {
+		this.idBeer = id;
 	}
 
 	public String getName() {
