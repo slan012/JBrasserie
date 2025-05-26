@@ -1,0 +1,1 @@
+select idOrder, firstName, lastName, phoneNumber,  from clientorder c join client c2 on c.idClient = c2.idClient;

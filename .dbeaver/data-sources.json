@@ -1,0 +1,38 @@
+{
+	"folders": {},
+	"connections": {
+		"mariaDB-196ef6a51c8-6c2175ccb07df28": {
+			"provider": "mysql",
+			"driver": "mariaDB",
+			"name": "beers",
+			"save-password": true,
+			"configuration": {
+				"host": "localhost",
+				"port": "3306",
+				"database": "beers",
+				"url": "jdbc:mariadb://localhost:3306/beers",
+				"configurationType": "MANUAL",
+				"home": "mariadb_client",
+				"type": "dev",
+				"closeIdleConnection": true,
+				"auth-model": "native"
+			}
+		}
+	},
+	"connection-types": {
+		"dev": {
+			"name": "Development",
+			"color": "255,255,255",
+			"description": "Regular development database",
+			"auto-commit": true,
+			"confirm-execute": false,
+			"confirm-data-change": false,
+			"smart-commit": false,
+			"smart-commit-recover": true,
+			"auto-close-transactions": true,
+			"close-transactions-period": 1800,
+			"auto-close-connections": true,
+			"close-connections-period": 14400
+		}
+	}
+}

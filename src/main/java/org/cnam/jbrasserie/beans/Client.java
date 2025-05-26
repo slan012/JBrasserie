@@ -49,6 +49,10 @@ public class Client {
 	public void setPhone(Integer phone) {
 		this.phone = phone;
 	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 	
 	
 	

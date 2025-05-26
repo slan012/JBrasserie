@@ -6,8 +6,10 @@ import org.cnam.jbrasserie.beans.Client;
 
 public interface ClientDao {
 	public List<Client> findAll();
-	public Client findByName(String name);
-	public void createNew(Client client);
-	public void update(int id, Client client);
-	public void delete (int id);	
+	public List<Client> findByName(String name);
+	public Client findById(int id);
+	public void update(Client client);	
+	public void delete (int id);
+	public void add(Client client);
+
 }

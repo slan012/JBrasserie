@@ -6,6 +6,7 @@ public class Order {
 	private Integer idOrder; //AUTO INCREMENT
 	private Integer idClient;
 	private Date date;
+	private int total;
 	
 	public Integer getIdOrder() {
 		return idOrder;
@@ -25,5 +26,14 @@ public class Order {
 	
 	public void setDate(Date date) {
 		this.date = date;
+	}
+
+	public void setIdOrder(Integer idOrder) {
+		this.idOrder = idOrder;
+	}
+
+	public void setTotal(double double1) {
+		// TODO Auto-generated method stub
+		
 	}
 }
