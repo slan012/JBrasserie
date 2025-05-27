@@ -22,7 +22,7 @@ public class ClientView{
 	
 	private void buildFrame() {
 		frame = new JFrame();
-		frame.setTitle("JBrasserie Shop");
+		frame.setTitle("JBrasserie Client");
 		frame.setSize(800, 600);
 		frame.setLocation(900, 400);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

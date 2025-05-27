@@ -6,10 +6,16 @@ public class Order {
 	private Integer idOrder; //AUTO INCREMENT
 	private Integer idClient;
 	private Date date;
-	private int total;
+	private double total;
 	
+
+
 	public Integer getIdOrder() {
 		return idOrder;
+	}
+	
+	public void setIdOrder(Integer idOrder) {
+		this.idOrder = idOrder;
 	}
 	
 	public Integer getIdClient() {
@@ -27,13 +33,12 @@ public class Order {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-
-	public void setIdOrder(Integer idOrder) {
-		this.idOrder = idOrder;
+	
+	public double getTotal() {
+		return total;
 	}
 
-	public void setTotal(double double1) {
-		// TODO Auto-generated method stub
-		
+	public void setTotal(Double total) {
+		this.total = total;
 	}
 }
