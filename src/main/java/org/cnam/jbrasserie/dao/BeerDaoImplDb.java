@@ -13,6 +13,12 @@ import org.cnam.jbrasserie.database.DBConnection;
 
 public class BeerDaoImplDb implements BeerDao{
 	
+	
+	/**
+	 * Retrieves all beers from the database.
+	 *
+	 * @return a list of all beers available in the database. If no beers are found, an empty list is returned.
+	 */
 	@Override
 	public List<Beer> findAll() {
 		//TEST OK
@@ -27,7 +33,7 @@ public class BeerDaoImplDb implements BeerDao{
 			
 			while(results.next()) {
 				Beer beer = new Beer();
-				beer = buildBeer(results, beer);
+				beer = getBeerFromResultSet(results, beer);
 				beerList.add(beer);
 			}
 		} catch (SQLException e) {
@@ -37,8 +43,14 @@ public class BeerDaoImplDb implements BeerDao{
 		return beerList;
 	}
 	
+	/**
+	 * Retrieves a beer from the database by its ID.
+	 *
+	 * @param id the ID of the beer to retrieve.
+	 * @return the beer with the specified ID, or null if no such beer exists.
+	 */
 	@Override
-	public Beer getBeerById(int id) {
+	public Beer findById(int id) {
 		// TEST OK
 		String query = "SELECT * FROM beer WHERE idBeer=?";
 		Beer beer = new Beer();
@@ -50,16 +62,23 @@ public class BeerDaoImplDb implements BeerDao{
 			ResultSet results = preparedStatement.executeQuery();
 			
 			if (results.next()) {
-				beer = buildBeer(results, beer);
+				beer = getBeerFromResultSet(results, beer);
 			}
 			results.close();
 		} catch (SQLException e) {
 			System.err.print("SQL request error : ");
 			e.printStackTrace();
-		} 
+		}
+		System.out.print(beer.getId());
 		return beer;
 	}
 
+	/**
+	 * Retrieves a list of beers from the database by their name.
+	 *
+	 * @param name the name of the beers to retrieve.
+	 * @return a list of beers with the specified name, or an empty list if no such beers exist.
+	 */
 	@Override
 	public List<Beer> findByName(String name) {
 		// TEST OK
@@ -74,17 +93,25 @@ public class BeerDaoImplDb implements BeerDao{
 			
 			while(results.next()) {
 				Beer beer = new Beer();
-				beer = buildBeer(results, beer);
+				beer = getBeerFromResultSet(results, beer);
 				beerList.add(beer);
 			}
 			results.close();
 		} catch (SQLException e) {
 			System.err.print("SQL request error : ");
 			e.printStackTrace();
-		} 
+		}
+		if (beerList.size() == 0) {
+			System.out.print("Beer not found!");
+		}
 		return beerList;
 	}
 
+	/**
+	 * Inserts a new beer into the database.
+	 *
+	 * @param beer the beer to insert.
+	 */
 	@Override
 	public void insertBeer(Beer beer) {
 		//TESTS OK
@@ -128,19 +155,72 @@ public class BeerDaoImplDb implements BeerDao{
 		}
 	}
 
-	@Override
-	public void deleteBeer(int id) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	/**
+	 * Updates an existing beer in the database.
+	 *
+	 * @param id the ID of the beer to update.
+	 * @param beer the updated beer object.
+	 */
 	@Override
 	public void updateBeer(int id, Beer beer) {
-		// TODO Auto-generated method stub
+		// TESTS OK
+		int updatedRows = 0;
+		String query = "UPDATE beer "
+					 + "SET name=?, brewer=?, style=?, alcohol=?, price=?, stock=? "
+					 + "WHERE idBeer=? ;";
 		
+		try(Connection connection = DBConnection.getConnection();
+			PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)){
+			
+			connection.setAutoCommit(false);
+			
+			preparedStatement.setString(1, beer.getName());
+			preparedStatement.setString(2, beer.getBrewer());
+			preparedStatement.setString(3, beer.getStyle());
+			preparedStatement.setFloat(4, beer.getAlcohol());
+			preparedStatement.setFloat(5, beer.getPrice());
+			preparedStatement.setInt(6, beer.getStock());
+			preparedStatement.setInt(7, beer.getId());
+		
+			updatedRows = preparedStatement.executeUpdate();
+			
+			connection.commit();
+			System.out.print("commit OK");
+			
+			if (updatedRows == 0) {
+				throw new SQLException("Updating failed, id " + beer.getId() + " not found");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
-	
-	private static Beer buildBeer(ResultSet results, Beer beer) {
+
+	/**
+	 * Deletes a beer from the database by its ID.
+	 *
+	 * @param id the ID of the beer to delete.
+	 */
+	@Override
+	public void deleteBeer(int id) {
+		int deletedRows = 0;
+		String query = "DELETE FROM beer "
+					 + "WHERE idBeer=? ;";
+		
+		try(Connection connection = DBConnection.getConnection();
+			PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)){
+			
+			preparedStatement.setInt(1, id);
+			deletedRows = preparedStatement.executeUpdate();
+			
+			if (deletedRows == 0) {
+				throw new SQLException("Deleting failed");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static Beer getBeerFromResultSet(ResultSet results, Beer beer) {
 		try {
 			beer.setId(results.getInt("idBeer"));
 			beer.setName(results.getString("name"));
@@ -155,5 +235,4 @@ public class BeerDaoImplDb implements BeerDao{
 		}
 		return beer;
 	}
-
 }
