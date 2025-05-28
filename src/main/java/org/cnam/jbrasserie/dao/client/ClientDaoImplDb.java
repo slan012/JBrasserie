@@ -1,4 +1,4 @@
-package org.cnam.jbrasserie.dao;
+package org.cnam.jbrasserie.dao.client;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -1,4 +1,4 @@
-package org.cnam.jbrasserie.dao;
+package org.cnam.jbrasserie.dao.beer;
 
 import java.util.List;
 
@@ -10,5 +10,5 @@ public interface BeerDao {
 	public List<Beer> findByName(String name);
 	public void insertBeer(Beer beer);
 	public void deleteBeer(int id);
-	public void updateBeer(int id, Beer beer);
+	public void updateBeer(Beer beer);
 }

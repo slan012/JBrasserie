@@ -8,8 +8,6 @@ public class Order {
 	private Date date;
 	private double total;
 	
-
-
 	public Integer getIdOrder() {
 		return idOrder;
 	}

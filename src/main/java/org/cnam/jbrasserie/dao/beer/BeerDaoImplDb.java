@@ -1,4 +1,4 @@
-package org.cnam.jbrasserie.dao;
+package org.cnam.jbrasserie.dao.beer;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -162,7 +162,7 @@ public class BeerDaoImplDb implements BeerDao{
 	 * @param beer the updated beer object.
 	 */
 	@Override
-	public void updateBeer(int id, Beer beer) {
+	public void updateBeer(Beer beer) {
 		// TESTS OK
 		int updatedRows = 0;
 		String query = "UPDATE beer "
