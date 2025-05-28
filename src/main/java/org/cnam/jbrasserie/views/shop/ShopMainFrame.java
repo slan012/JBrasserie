@@ -7,7 +7,7 @@ public class ShopMainFrame extends JFrame{
 	private static final long serialVersionUID = 1L;
 
 	public ShopMainFrame() {
-		setTitle("JBrasserie Client");
+		setTitle("JBrasserie Shop");
 		setSize(800, 600);
 		setLocation(100, 400);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);

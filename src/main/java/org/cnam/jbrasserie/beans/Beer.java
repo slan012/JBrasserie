@@ -64,5 +64,4 @@ public class Beer {
 	public void setStock(int stock) {
 		this.stock = stock;
 	}
-	
 }

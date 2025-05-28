@@ -1,4 +1,4 @@
-package org.cnam.jbrasserie.dao;
+package org.cnam.jbrasserie.dao.order;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.cnam.jbrasserie.beans.Order;
@@ -18,12 +17,12 @@ public class OrderDaoImplDb implements OrderDao{
 	public List<Order> findAll() {
 		// TEST OK
 		String query = 
-				  "SELECT c.idOrder , c.idClient, `date`, SUM(quantity * b.price) as total\r\n"
-				+ "FROM clientorder c\r\n"
-				+ "JOIN order_beer ob \r\n"
-				+ "ON ob.idOrder = c.idOrder \r\n"
-				+ "JOIN beer b \r\n"
-				+ "ON ob.idBeer = b.idBeer\r\n"
+				  "SELECT c.idOrder , c.idClient, `date`, SUM(quantity * b.price) as total "
+				+ "FROM clientorder c "
+				+ "JOIN orderline ob "
+				+ "ON ob.idOrder = c.idOrder "
+				+ "JOIN beer b "
+				+ "ON ob.idBeer = b.idBeer "
 				+ "GROUP BY c.idOrder";
 		
 		List<Order> orderList = new ArrayList<>();
@@ -48,12 +47,12 @@ public class OrderDaoImplDb implements OrderDao{
 	public Order findById(int id) {
 		// TEST OK
 		String query = 
-				  "SELECT c.idOrder , c.idClient, `date`, SUM(quantity * b.price) as total\r\n"
-				+ "FROM clientorder c\r\n"
-				+ "JOIN order_beer ob \r\n"
-				+ "ON ob.idOrder = c.idOrder \r\n"
-				+ "JOIN beer b \r\n"
-				+ "ON ob.idBeer = b.idBeer\r\n"
+				  "SELECT c.idOrder , c.idClient, `date`, SUM(quantity * b.price) as total "
+				+ "FROM clientorder c "
+				+ "JOIN orderline ob "
+				+ "ON ob.idOrder = c.idOrder "
+				+ "JOIN beer b "
+				+ "ON ob.idBeer = b.idBeer "
 				+ "WHERE c.idOrder = ? ";
 		
 		Order order = null;
@@ -75,15 +74,40 @@ public class OrderDaoImplDb implements OrderDao{
 	}
 	
 	@Override
-	public Order findByName(String clientName) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Order> findByClientId(int id) {
+		String query = 
+				  "select c.idClient, c2.idOrder, c2.`date`, c.firstName, c.lastName, c.adress, c.zipCode, c.city, c.phoneNumber,  SUM(quantity * b.price) as total "
+				  + "from client c "
+				  + "inner join clientorder c2 on c.idClient = c2.idClient "
+				  + "inner join orderline ob on ob.idOrder = c2.idOrder "
+				  + "inner join beer b on b.idBeer = ob.idBeer "
+				  + "where c.idClient = ? "
+				  + "group by c2.idOrder";
+		
+		List<Order> orderList = new ArrayList<>();
+		
+		try (Connection connection = DBConnection.getConnection();
+			PreparedStatement preparedStatement = connection.prepareStatement(query);){
+			
+			preparedStatement.setInt(1, id);
+			ResultSet results = preparedStatement.executeQuery();
+			
+			while(results.next()) {
+				Order order = builOrder(results);
+				orderList.add(order);
+			}
+		} catch (SQLException e) {
+			System.err.print("SQL request error : ");
+			e.printStackTrace();
+		}
+		return orderList;
 	}
-
+	
+	
 	@Override
 	public void insertOrder(Order order) {
 		int updatedRows = 0;
-		String query = "INSERT INTO order(date, idOrder)"
+		String query = "INSERT INTO clientorder(date, idClient) "
 				+ "VALUES(CURDATE(), ?);";
 		
 		try(Connection connection = DBConnection.getConnection();
@@ -104,7 +128,6 @@ public class OrderDaoImplDb implements OrderDao{
 				if (generatedKeys.next()) {
 					order.setIdOrder(generatedKeys.getInt(1));
 				} else {
-					
 					throw new SQLException("Inserting beer failed, no Id fetched");
 				}
 			} catch (SQLException e) {
@@ -119,12 +142,7 @@ public class OrderDaoImplDb implements OrderDao{
 		
 	}
 
-	@Override
-	public void updateOrder(int id, Order order) {
-		// TODO Auto-generated method stub
 		
-	}
-	
 	private Order builOrder(ResultSet results) {
 		Order order = new Order();
 		try {

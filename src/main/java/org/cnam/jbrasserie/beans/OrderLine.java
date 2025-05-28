@@ -1,6 +1,6 @@
 package org.cnam.jbrasserie.beans;
 
-public class OrderBeer {
+public class OrderLine {
 	private Integer idOrder;
 	private Integer idBeer;
 	private Integer quantity;
