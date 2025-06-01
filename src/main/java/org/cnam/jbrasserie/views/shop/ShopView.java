@@ -1,18 +1,31 @@
-package org.cnam.jbrasserie.views.client;
+package org.cnam.jbrasserie.views.shop;
 
+import java.awt.BorderLayout;
+
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.WindowConstants;
 
-import org.cnam.jbrasserie.views.client.catalog.ClientCatalogPane;
+import org.cnam.jbrasserie.controlers.shop.ClientController;
+import org.cnam.jbrasserie.views.common.BeersTableModel;
 import org.cnam.jbrasserie.views.common.CatalogPane;
+import org.cnam.jbrasserie.views.shop.catalog.CatalogTab;
+import org.cnam.jbrasserie.views.shop.clients.ClientTab;
 
-public class ClientView{
+public class ShopView extends JFrame{
+
 	private static final long serialVersionUID = 1L;
+	
 	JFrame frame;
 	
-	public ClientView() {
+	
+	public ShopView() {
+		
 		buildFrame();
 		
 	}
@@ -30,13 +43,13 @@ public class ClientView{
 		
 		JTabbedPane tabbedPane = new JTabbedPane();
 		
-		JPanel profilePane = new JPanel();
-		JPanel catalogPane = new ClientCatalogPane();
+		JPanel clientPane = new ClientTab();
+		JPanel catalogPane = new CatalogTab();
 		JPanel checkoutPane = new JPanel();
 		
-		tabbedPane.addTab("Profil", profilePane);
+		tabbedPane.addTab("Client", clientPane);
 		tabbedPane.addTab("Catalogue", catalogPane);
-		tabbedPane.addTab("Panier", checkoutPane);
+		tabbedPane.addTab("Commandes", checkoutPane);
 
 		frame.getContentPane().add(tabbedPane);
 		
@@ -68,5 +81,4 @@ public class ClientView{
 	public void setRows(String[][] data) {
 		
 	};
-	
 }

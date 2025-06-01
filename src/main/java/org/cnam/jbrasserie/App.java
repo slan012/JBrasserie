@@ -10,7 +10,7 @@ import org.cnam.jbrasserie.dao.client.ClientDao;
 import org.cnam.jbrasserie.dao.client.ClientDaoImplDb;
 import org.cnam.jbrasserie.dao.order.OrderDao;
 import org.cnam.jbrasserie.dao.order.OrderDaoImplDb;
-import org.cnam.jbrasserie.views.client.ClientView;
+import org.cnam.jbrasserie.views.shop.ShopView;
 
 /**
  * Hello world!
@@ -30,19 +30,11 @@ public class App {
     	}
     	
     	    	
-    	ClientView view = new ClientView();
-    	view.display();
-    	
-    	
-    	
-    	
-//    	Map<Integer, Integer> orderList = orderBeerDao.findBeersByIdOrder(2);
-//    	
-//    	for (Map.Entry<Integer, Integer> order : orderList.entrySet()) {
-//    		O
-//    		System.out.println("Commande n° 2 || Bière : " + order.getKey() + " || Quantité : " + order.getValue());
-// 
-//    	}
+    	ShopView shopView = new ShopView();
+    	shopView.display();
+ 
+    	//ClientView clientView = new ClientView();
+    	//clientView.display();
     	
 
     }

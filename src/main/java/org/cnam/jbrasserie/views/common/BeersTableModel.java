@@ -1,4 +1,4 @@
-package org.cnam.jbrasserie.views.client;
+package org.cnam.jbrasserie.views.common;
 
 import java.util.ArrayList;
 import java.util.List;
