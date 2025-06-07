@@ -8,7 +8,7 @@ public interface BeerDao {
 	public List<Beer> findAll() ;
 	public Beer findById(int id);
 	public List<Beer> findByName(String name);
-	public void insertBeer(Beer beer);
-	public void deleteBeer(int id);
-	public void updateBeer(Beer beer);
+	public void add(Beer beer);
+	public void delete(int id);
+	public void update(Beer beer);
 }

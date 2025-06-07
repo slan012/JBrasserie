@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -202,8 +203,10 @@ public class ClientDaoImplDb implements ClientDao {
 			if (deletedRows == 0) {
 				throw new SQLException("Deleting failed");
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+		} catch (NullPointerException e ) {
+			System.out.print("Sélectionnez une ligne");
+		} catch (Exception e2) {
+			System.out.print("Impossible de supprimer un client qui a effectué au moins une commande");
 		}
 
 	}

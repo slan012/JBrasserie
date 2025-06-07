@@ -69,7 +69,7 @@ public class BeerDaoImplDb implements BeerDao{
 			System.err.print("SQL request error : ");
 			e.printStackTrace();
 		}
-		System.out.print(beer.getId());
+
 		return beer;
 	}
 
@@ -113,7 +113,7 @@ public class BeerDaoImplDb implements BeerDao{
 	 * @param beer the beer to insert.
 	 */
 	@Override
-	public void insertBeer(Beer beer) {
+	public void add(Beer beer) {
 		//TESTS OK
 		int updatedRows = 0;
 		String query = "INSERT INTO beer(name, brewer, style, alcohol, price, stock)"
@@ -162,7 +162,7 @@ public class BeerDaoImplDb implements BeerDao{
 	 * @param beer the updated beer object.
 	 */
 	@Override
-	public void updateBeer(Beer beer) {
+	public void update(Beer beer) {
 		// TESTS OK
 		int updatedRows = 0;
 		String query = "UPDATE beer "
@@ -201,7 +201,7 @@ public class BeerDaoImplDb implements BeerDao{
 	 * @param id the ID of the beer to delete.
 	 */
 	@Override
-	public void deleteBeer(int id) {
+	public void delete(int id) {
 		int deletedRows = 0;
 		String query = "DELETE FROM beer "
 					 + "WHERE idBeer=? ;";
