@@ -1,19 +1,10 @@
 package org.cnam.jbrasserie.views.shop;
 
-import java.awt.BorderLayout;
-
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTable;
 import javax.swing.WindowConstants;
 
-import org.cnam.jbrasserie.controlers.shop.ClientController;
-import org.cnam.jbrasserie.views.common.BeersTableModel;
-import org.cnam.jbrasserie.views.common.CatalogPane;
 import org.cnam.jbrasserie.views.shop.catalog.CatalogTab;
 import org.cnam.jbrasserie.views.shop.clients.ClientTab;
 

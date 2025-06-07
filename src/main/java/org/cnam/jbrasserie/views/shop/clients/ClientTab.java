@@ -17,10 +17,8 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.TableModel;
-
 import org.cnam.jbrasserie.beans.Client;
-import org.cnam.jbrasserie.controlers.shop.ClientController;
+import org.cnam.jbrasserie.controlers.shop.ClientControler;
 
 
 public class ClientTab extends JPanel{
@@ -30,27 +28,27 @@ public class ClientTab extends JPanel{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private ClientController clientControler;
+	private ClientControler clientControler;
 	
 	private JPanel editPanel;
 	
-	JTable clientTable;
-	ClientTableModel clientTableModel;
+	private JTable clientTable;
+	private ClientTableModel clientTableModel;
 	
+	private JTextField idField;
+	private JTextField firstNameField;
+	private JTextField lastNameField;
+	private JTextField adressField;
+	private JTextField zipCodeField;
+	private JTextField cityField;
+	private JTextField phoneField;
 	
-	JTextField id;
-	JTextField firstNameField;
-	JTextField lastNameField;
-	JTextField adressField;
-	JTextField zipCodeField;
-	JTextField cityField;
-	JTextField phoneField;
+	private List<JTextField> textFieldList;
 	
-	List<JTextField> textFieldList = new ArrayList<>();
 	public ClientTab() {
 		
 		clientTableModel = new ClientTableModel();
-		this.clientControler = new ClientController(this, clientTableModel);
+		this.clientControler = new ClientControler(this, clientTableModel);
 		this.setLayout(new BorderLayout());
 
 		
@@ -80,8 +78,7 @@ public class ClientTab extends JPanel{
 					int selectedRow = clientTable.getSelectedRow();
 					if (selectedRow >= 0 && selectedRow < clientTableModel.getRowCount()) {
 						int modelRow = clientTable.convertRowIndexToModel(selectedRow);
-						TableModel tableModel = clientTable.getModel();
-						Client client = clientControler.handleClientRow((int) tableModel.getValueAt(modelRow, 0));
+						Client client = clientControler.handleClientRow((int) clientTableModel.getValueAt(modelRow, 0));
 						updateEditPanel(client);
 						
 					}
@@ -93,10 +90,8 @@ public class ClientTab extends JPanel{
 	}
 	
 
-
-
 	public void updateEditPanel(Client client) {
-		id.setText(String.valueOf(client.getId()));
+		idField.setText(String.valueOf(client.getId()));
 		firstNameField.setText(client.getFirstName());
 		lastNameField.setText(client.getLastName());
 		adressField.setText(client.getAdress());
@@ -118,7 +113,7 @@ public class ClientTab extends JPanel{
 	
 	public Map<String, String> getEditedClientData() {
 		Map<String, String> editedData = new HashMap<>();
-		editedData.put("id", id.getText());
+		editedData.put("id", idField.getText());
 		editedData.put("firstName", firstNameField.getText());
 		editedData.put("lastName", lastNameField.getText());
 		editedData.put("adress", adressField.getText());
@@ -143,8 +138,8 @@ public class ClientTab extends JPanel{
 		
 		// Fields		
 		
-		id = new JTextField();
-		id.setVisible(false);
+		idField = new JTextField();
+		idField.setVisible(false);
 		firstNameField = new JTextField("");
 		lastNameField = new JTextField("");
 		adressField =  new JTextField("");
@@ -152,7 +147,8 @@ public class ClientTab extends JPanel{
 		cityField =  new JTextField("");
 		phoneField =  new JTextField("");
 
-		textFieldList.add(id);
+		textFieldList = new ArrayList<>();
+		textFieldList.add(idField);
 		textFieldList.add(firstNameField);
 		textFieldList.add(lastNameField);
 		textFieldList.add(adressField);

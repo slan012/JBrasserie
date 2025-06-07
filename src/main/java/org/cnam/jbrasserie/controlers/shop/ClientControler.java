@@ -2,8 +2,6 @@ package org.cnam.jbrasserie.controlers.shop;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Map;
 
 import org.cnam.jbrasserie.beans.Client;
@@ -12,7 +10,7 @@ import org.cnam.jbrasserie.dao.client.ClientDaoImplDb;
 import org.cnam.jbrasserie.views.shop.clients.ClientTab;
 import org.cnam.jbrasserie.views.shop.clients.ClientTableModel;
 
-public class ClientController implements ActionListener{
+public class ClientControler implements ActionListener{
 	
 	
 
@@ -23,7 +21,7 @@ public class ClientController implements ActionListener{
 	ClientTableModel clientTableModel;
 	boolean isNewClient = false;
 		
-	public ClientController(ClientTab view, ClientTableModel clientTableModel) {
+	public ClientControler(ClientTab view, ClientTableModel clientTableModel) {
 		this.clientView = view;
 		this.clientTableModel = clientTableModel;
 	}
@@ -41,9 +39,9 @@ public class ClientController implements ActionListener{
 					this.clientDao.add(editedClient);
 				}
 			} catch (NullPointerException e1){
-				System.out.print("Veuillez remplir tous les champs");
+				System.out.println("Veuillez remplir tous les champs");
 			} catch (Exception e2) {
-				System.out.print("Veuillez remplir tous les champs");
+				System.out.println("Veuillez remplir tous les champs");
 			}
 			
 			this.clientView.clearEditPanel();
@@ -64,7 +62,7 @@ public class ClientController implements ActionListener{
 				clientDao.delete(editedClient.getId());
 				this.clientView.clearEditPanel();
 			} else {
-				System.out.print("Sélectionnez une ligne");
+				System.out.println("Sélectionnez une ligne");
 			}
 			break;
 		}	
