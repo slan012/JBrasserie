@@ -15,7 +15,7 @@ public class BeersTableModel extends AbstractTableModel{
 
 	private static final long serialVersionUID = 1L;
 	private String[] columnNames = {"Référence", "Nom", "Brasserie", "Style", "Alcool", "PU €", "Stock"};
-	private List<Beer> beers = beerDao.findAll();
+	private List<Beer> beers;
 	
 	
 	@Override
@@ -72,8 +72,8 @@ public class BeersTableModel extends AbstractTableModel{
 		}
 	}
 	
-	public void updateDataFromDB() {
-		this.beers =  beerDao.findAll();
+	public void update(List<Beer> beers) {
+		this.beers =  beers;
 		fireTableDataChanged();
 	}
 }

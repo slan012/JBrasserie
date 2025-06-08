@@ -7,6 +7,7 @@ import javax.swing.WindowConstants;
 
 import org.cnam.jbrasserie.views.shop.catalog.CatalogTab;
 import org.cnam.jbrasserie.views.shop.clients.ClientTab;
+import org.cnam.jbrasserie.views.shop.orders.OrderTab;
 
 public class ShopView extends JFrame{
 
@@ -17,12 +18,6 @@ public class ShopView extends JFrame{
 	
 	public ShopView() {
 		
-		buildFrame();
-		
-	}
-	
-	private void buildFrame() {
-	
 		// Main Frame
 		frame = new JFrame();
 		frame.setTitle("JBrasserie Shop");
@@ -36,40 +31,16 @@ public class ShopView extends JFrame{
 		
 		JPanel clientPane = new ClientTab();
 		JPanel catalogPane = new CatalogTab();
-		JPanel checkoutPane = new JPanel();
+		JPanel orderPane = new OrderTab();
 		
-		tabbedPane.addTab("Client", clientPane);
+		tabbedPane.addTab("Clients", clientPane);
 		tabbedPane.addTab("Catalogue", catalogPane);
-		tabbedPane.addTab("Commandes", checkoutPane);
+		tabbedPane.addTab("Commandes", orderPane);
 
 		frame.getContentPane().add(tabbedPane);
-		
-
-//		BeersTableModel model = new BeersTableModel();
-//			
-//		JTable beerTable = new JTable(model);
-//		
-//		
-//		JScrollPane scrollPane = new JScrollPane(beerTable);
-//		beerTable.setFillsViewportHeight(true);
-//		
-//		catalogPane.add(scrollPane, BorderLayout.NORTH);
-//		
-//		
-//		JLabel label2 = new JLabel("Commandes");
-//		catalogPane.add(label2);
-//		JLabel label3 = new JLabel("Clients");
-//		checkoutPane.add(label3);
-		
-
-		
-		}
+	}
 	
 	public void display() {
 		frame.setVisible(true);
 	}
-	
-	public void setRows(String[][] data) {
-		
-	};
 }

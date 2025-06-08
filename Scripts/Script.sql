@@ -1,1 +1,4 @@
-select idOrder, firstName, lastName, phoneNumber,  from clientorder c join client c2 on c.idClient = c2.idClient;
+SELECT idOrder, b.*, quantity 
+FROM orderline ol
+join beer b on b.idBeer = ol.idBeer
+WHERE idOrder = 3

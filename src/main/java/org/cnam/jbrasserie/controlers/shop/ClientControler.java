@@ -2,6 +2,7 @@ package org.cnam.jbrasserie.controlers.shop;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.util.Map;
 
 import org.cnam.jbrasserie.beans.Client;
@@ -20,10 +21,13 @@ public class ClientControler implements ActionListener{
 	Client editedClient;
 	ClientTableModel clientTableModel;
 	boolean isNewClient = false;
+	List<Client> clients;
 		
 	public ClientControler(ClientTab view, ClientTableModel clientTableModel) {
 		this.clientView = view;
 		this.clientTableModel = clientTableModel;
+		clients = clientDao.findAll();
+		clientTableModel.update(clients);
 	}
 	
 	
@@ -71,7 +75,8 @@ public class ClientControler implements ActionListener{
 			throw new IllegalArgumentException("Unexpected value: " + e.getActionCommand());
 		}
 		editedClient = null;
-		this.clientTableModel.updateDataFromDB();
+		clients = this.clientDao.findAll();
+		clientTableModel.update(clients);
 		
 	}
 	

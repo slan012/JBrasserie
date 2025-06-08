@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.cnam.jbrasserie.beans.Client;
 import org.cnam.jbrasserie.beans.Order;
 import org.cnam.jbrasserie.database.DBConnection;
 
@@ -17,13 +18,14 @@ public class OrderDaoImplDb implements OrderDao{
 	public List<Order> findAll() {
 		// TEST OK
 		String query = 
-				  "SELECT c.idOrder , c.idClient, `date`, SUM(quantity * b.price) as total "
+				  "SELECT c.idOrder , c.idClient, c2.*, `date`, SUM(quantity * b.price) as total "
 				+ "FROM clientorder c "
 				+ "JOIN orderline ob "
 				+ "ON ob.idOrder = c.idOrder "
 				+ "JOIN beer b "
 				+ "ON ob.idBeer = b.idBeer "
-				+ "GROUP BY c.idOrder";
+				+ "join client c2 on c2.idClient = c.idClient "
+				+ "GROUP BY c.idOrder;";
 		
 		List<Order> orderList = new ArrayList<>();
 
@@ -47,12 +49,13 @@ public class OrderDaoImplDb implements OrderDao{
 	public Order findById(int id) {
 		// TEST OK
 		String query = 
-				  "SELECT c.idOrder , c.idClient, `date`, SUM(quantity * b.price) as total "
+				  "SELECT c.idOrder , c.idClient, c2.*, `date`, SUM(quantity * b.price) as total "
 				+ "FROM clientorder c "
 				+ "JOIN orderline ob "
 				+ "ON ob.idOrder = c.idOrder "
 				+ "JOIN beer b "
 				+ "ON ob.idBeer = b.idBeer "
+				+ "JOIN client c2 on c2.idClient = c.idClient"
 				+ "WHERE c.idOrder = ? ";
 		
 		Order order = null;
@@ -76,13 +79,15 @@ public class OrderDaoImplDb implements OrderDao{
 	@Override
 	public List<Order> findByClientId(int id) {
 		String query = 
-				  "select c.idClient, c2.idOrder, c2.`date`, c.firstName, c.lastName, c.adress, c.zipCode, c.city, c.phoneNumber,  SUM(quantity * b.price) as total "
-				  + "from client c "
-				  + "inner join clientorder c2 on c.idClient = c2.idClient "
-				  + "inner join orderline ob on ob.idOrder = c2.idOrder "
-				  + "inner join beer b on b.idBeer = ob.idBeer "
-				  + "where c.idClient = ? "
-				  + "group by c2.idOrder";
+				" SELECT c.idOrder , c2.*, `date`, SUM(quantity * b.price) as total "
+				+ "FROM clientorder c "
+				+ "JOIN orderline ob "
+				+ "ON ob.idOrder = c.idOrder "
+				+ "JOIN beer b "
+				+ "ON ob.idBeer = b.idBeer "
+				+ "JOIN client c2 on c2.idClient = c.idClient "
+				+ "WHERE c.idClient  = ? "
+				+ "GROUP BY c.idOrder ;";
 		
 		List<Order> orderList = new ArrayList<>();
 		
@@ -115,7 +120,7 @@ public class OrderDaoImplDb implements OrderDao{
 			
 			connection.setAutoCommit(false);
 			
-			preparedStatement.setInt(1,order.getIdClient());
+			preparedStatement.setInt(1,order.getClient().getId());
 		
 			updatedRows = preparedStatement.executeUpdate();
 			connection.commit();
@@ -144,11 +149,20 @@ public class OrderDaoImplDb implements OrderDao{
 
 		
 	private Order builOrder(ResultSet results) {
+		Client client = new Client();
 		Order order = new Order();
 		try {
+			client.setId(results.getInt("idClient"));
+			client.setFirstName(results.getString("firstName"));
+			client.setLastName(results.getString("lastName"));
+			client.setAdress(results.getString("adress"));
+			client.setZipCode(results.getInt("zipCode"));
+			client.setCity(results.getString("city"));
+			client.setPhone(results.getInt("phoneNumber"));
+			
+			order.setClient(client);
 			order.setIdOrder(results.getInt("idOrder"));
 			order.setDate(results.getDate("date"));
-			order.setIdClient(results.getInt("idClient"));
 			order.setTotal(results.getDouble("total"));
 		} catch (SQLException e) {
 			System.err.print("Error building order object : ");

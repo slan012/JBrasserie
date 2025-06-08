@@ -2,6 +2,7 @@ package org.cnam.jbrasserie.controlers.shop;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.util.Map;
 
 import org.cnam.jbrasserie.beans.Beer;
@@ -20,10 +21,13 @@ public class CatalogControler implements ActionListener{
 	Beer editedBeer;
 	BeersTableModel beerTableModel;
 	boolean isNewBeer = false;
+	List<Beer> beerList;
 		
 	public CatalogControler(CatalogTab view, BeersTableModel beerTableModel) {
 		this.catalogView = view;
 		this.beerTableModel = beerTableModel;
+		beerList = beerDao.findAll();
+		this.beerTableModel.update(beerList);
 	}
 	
 	
@@ -72,7 +76,8 @@ public class CatalogControler implements ActionListener{
 			throw new IllegalArgumentException("Unexpected value: " + e.getActionCommand());
 		}
 		editedBeer = null;
-		this.beerTableModel.updateDataFromDB();
+		beerList = beerDao.findAll();
+		this.beerTableModel.update(beerList);
 		
 	}
 	

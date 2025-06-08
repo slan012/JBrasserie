@@ -1,22 +1,24 @@
 package org.cnam.jbrasserie.views.shop.orders;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import org.cnam.jbrasserie.beans.Order;
+import org.cnam.jbrasserie.beans.OrderLine;
 
-public class OrderTableModel extends AbstractTableModel{
-	
-	
+public class OrderLinesTableModel extends AbstractTableModel {
+
 	private static final long serialVersionUID = 1L;
-	private String[] columnNames = {"Référence commande", "Référence client", "Nom", "Prénom", "Ville", "Téléphone", "Montant"};
-	private List<Order> orders;
+
+	private String[] columnNames = {"Référence", "Nom", "Brasserie", "Style", "Alccol", "PU €", "Quantité"};
+	
+	private List<OrderLine> orderLines;
 	
 	
 	@Override
 	public int getRowCount() {
-		return this.orders.size();
+		return this.orderLines.size();
 	}
 
 	@Override
@@ -33,19 +35,19 @@ public class OrderTableModel extends AbstractTableModel{
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		switch (columnIndex) {
 		case 0: 
-			return orders.get(rowIndex).getIdOrder();
+			return orderLines.get(rowIndex).getBeer().getId();
 		case 1: 
-			return orders.get(rowIndex).getClient().getId();
+			return orderLines.get(rowIndex).getBeer().getName();
 		case 2: 
-			return orders.get(rowIndex).getClient().getLastName();
+			return orderLines.get(rowIndex).getBeer().getBrewer();
 		case 3: 
-			return orders.get(rowIndex).getClient().getFirstName();
+			return orderLines.get(rowIndex).getBeer().getStyle();
 		case 4: 
-			return orders.get(rowIndex).getClient().getCity();
+			return orderLines.get(rowIndex).getBeer().getAlcohol();
 		case 5: 
-			return orders.get(rowIndex).getClient().getPhone();
+			return orderLines.get(rowIndex).getBeer().getPrice();
 		case 6:
-			return orders.get(rowIndex).getTotal();
+			return orderLines.get(rowIndex).getQuantity();
 		
 		default:
 			throw new IllegalArgumentException("Unexpected value: " + columnIndex);
@@ -66,8 +68,12 @@ public class OrderTableModel extends AbstractTableModel{
 		}
 	}
 	
-	public void update(List<Order> orders) {
-		this.orders = orders;
+	public void update(List<OrderLine> orderLines) {
+		this.orderLines = orderLines;
 		fireTableDataChanged();
+	}
+	
+	public void init() {
+		this.orderLines = new ArrayList<>();
 	}
 }
