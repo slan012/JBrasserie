@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Order {
 	private Integer idOrder; //AUTO INCREMENT
-	private Integer idClient;
+	private Client client;
 	private Date date;
 	private double total;
 	
@@ -16,12 +16,12 @@ public class Order {
 		this.idOrder = idOrder;
 	}
 	
-	public Integer getIdClient() {
-		return idClient;
+	public Client getClient() {
+		return client;
 	}
 	
-	public void setIdClient(Integer idClient) {
-		this.idClient = idClient;
+	public void setClient(Client client) {
+		this.client = client;
 	}
 	
 	public Date getDate() {

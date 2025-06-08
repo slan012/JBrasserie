@@ -116,23 +116,23 @@ public class CatalogTab extends JPanel{
 		this.editPanel = new JPanel();
 		
 		// Labels
-		JLabel nameLabel =   new JLabel("Nom :");
-		JLabel brewerLabel = new JLabel("Brasseur :");
-		JLabel styleLabel =  new JLabel("Style :");
+		JLabel nameLabel =    new JLabel("Nom :");
+		JLabel brewerLabel =  new JLabel("Brasseur :");
+		JLabel styleLabel  =  new JLabel("Style :");
 		JLabel alcoholLabel = new JLabel("Alcool :");
-		JLabel priceLabel =  new JLabel("Prix :");
-		JLabel stockLabel =  new JLabel("Stock :");
+		JLabel priceLabel =   new JLabel("Prix :");
+		JLabel stockLabel =   new JLabel("Stock :");
 		
 		// Fields		
 		
-		this.idField = new JTextField();
-		this.idField.setVisible(false);
-		this.nameField = new JTextField();
-		this.brewerField = new JTextField();
-		this.styleField =  new JTextField();
+		this.idField =      new JTextField();
+		this.nameField =    new JTextField();
+		this.brewerField =  new JTextField();
+		this.styleField =   new JTextField();
 		this.alcoholField = new JTextField();
-		this.priceField =  new JTextField();
-		this.stockField =  new JTextField();
+		this.priceField =   new JTextField();
+		this.stockField =   new JTextField();
+		this.idField.setVisible(false);
 		
 		this.textFieldList = new ArrayList<>();
 		this.textFieldList.add(this.idField);

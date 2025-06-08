@@ -2,7 +2,7 @@ package org.cnam.jbrasserie.beans;
 
 public class OrderLine {
 	private Integer idOrder;
-	private Integer idBeer;
+	private Beer beer;
 	private Integer quantity;
 	
 	public Integer getIdOrder() {
@@ -11,12 +11,15 @@ public class OrderLine {
 	public void setIdOrder(Integer idOrder) {
 		this.idOrder = idOrder;
 	}
-	public Integer getIdBeer() {
-		return idBeer;
+
+	public Beer getBeer() {
+		return beer;
 	}
-	public void setIdBeer(Integer idBeer) {
-		this.idBeer = idBeer;
+	
+	public void setBeer(Beer beer) {
+		this.beer = beer;
 	}
+	
 	public Integer getQuantity() {
 		return quantity;
 	}

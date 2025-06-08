@@ -10,13 +10,11 @@ import org.cnam.jbrasserie.dao.client.ClientDaoImplDb;
 
 public class ClientTableModel extends AbstractTableModel {
 
-	ClientDao clientDao = new ClientDaoImplDb();
+	List<Client> clients;
 
 	private static final long serialVersionUID = 1L;
 	private String[] columnNames = {"Numéro client", "Nom", "Prénom", "Adresse", "Code postal", "Ville", "Numéro de téléphone"};
-	private List<Client> clients = clientDao.findAll();
-	
-	
+		
 	@Override
 	public int getRowCount() {
 		return this.clients.size();
@@ -62,15 +60,14 @@ public class ClientTableModel extends AbstractTableModel {
 				return Integer.class;
 			case 4 :
 				return Integer.class;
-			case 6 :
-				return Integer.class;
+
 			default:
 				return String.class;
 		}
 	}
 	
-	public void updateDataFromDB() {
-		this.clients =  clientDao.findAll();
+	public void update(List<Client> clients) {
+		this.clients = clients;
 		fireTableDataChanged();
 	}
 }

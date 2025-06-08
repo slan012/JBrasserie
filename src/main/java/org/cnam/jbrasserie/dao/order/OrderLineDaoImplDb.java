@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.cnam.jbrasserie.beans.Beer;
 import org.cnam.jbrasserie.beans.OrderLine;
 import org.cnam.jbrasserie.database.DBConnection;
 
@@ -14,7 +16,11 @@ public class OrderLineDaoImplDb implements OrderLineDao {
 
 	@Override
 	public List<OrderLine> findOrderLineById(Integer idOrder) {
-		String query = "SELECT idOrder, idBeer, quantity FROM orderline WHERE idOrder=?";
+		String query = 
+				"SELECT idOrder, b.*, quantity \r\n"
+				+ "FROM orderline ol\r\n"
+				+ "join beer b on b.idBeer = ol.idBeer\r\n"
+				+ "WHERE idOrder = ?";
 		
 		List<OrderLine> orderLineList = new ArrayList<>();
 		
@@ -26,8 +32,18 @@ public class OrderLineDaoImplDb implements OrderLineDao {
 			
 			while (results.next()) {
 				OrderLine orderLine = new OrderLine();
+				Beer beer = new Beer();
+				
+				beer.setId(results.getInt("idBeer"));
+				beer.setName(results.getString("name"));
+				beer.setBrewer(results.getString("brewer"));
+				beer.setStyle(results.getString("style"));
+				beer.setAlcohol(results.getFloat("alcohol"));
+				beer.setPrice(results.getFloat("price"));
+				beer.setStock(results.getInt("stock"));
+				
 				orderLine.setIdOrder(results.getInt("idOrder"));
-				orderLine.setIdBeer(results.getInt("idBeer"));
+				orderLine.setBeer(beer);
 				orderLine.setQuantity(results.getInt("quantity"));
 				orderLineList.add(orderLine);
 			}
@@ -52,7 +68,7 @@ public class OrderLineDaoImplDb implements OrderLineDao {
 			connection.setAutoCommit(false);
 			
 			preparedStatement.setInt(1, orderLine.getIdOrder());
-			preparedStatement.setInt(2, orderLine.getIdBeer());
+			preparedStatement.setInt(2, orderLine.getBeer().getId());
 			preparedStatement.setInt(3, orderLine.getQuantity());
 		
 			updatedRows = preparedStatement.executeUpdate();

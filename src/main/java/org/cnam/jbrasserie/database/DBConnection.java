@@ -27,13 +27,13 @@ public class DBConnection {
 	}
 	
 	private static void setDbConfig() {
-		BufferedReader br;
+
 		Properties prop = new Properties();
 		String propFilePath = new File("src/main/java/org/cnam/jbrasserie/config/config.properties").getAbsolutePath();
 		
-		try (FileReader fr = new FileReader(propFilePath)){
+		try (FileReader fr = new FileReader(propFilePath);
+			 BufferedReader br = new BufferedReader(fr)){
 			
-			br = new BufferedReader(fr);
 			prop.load(br);
 			
 			url =      prop.getProperty("dburl");
