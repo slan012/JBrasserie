@@ -1,12 +1,19 @@
 package org.cnam.jbrasserie.beans;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Order {
 	private Integer idOrder; //AUTO INCREMENT
 	private Client client;
 	private Date date;
-	private double total;
+	private List<OrderLine> lines;
+	private Double total;
+	
+	public Order() {
+		this.lines = new ArrayList<>();
+	}
 	
 	public Integer getIdOrder() {
 		return idOrder;
@@ -30,6 +37,18 @@ public class Order {
 	
 	public void setDate(Date date) {
 		this.date = date;
+	}
+	
+	public List<OrderLine> getLines() {
+		return lines;
+	}
+	
+	public void setLines(List<OrderLine> lines) {
+		this.lines = lines;
+	}
+	
+	public void addLine(OrderLine line) {
+		this.lines.add(line);
 	}
 	
 	public double getTotal() {

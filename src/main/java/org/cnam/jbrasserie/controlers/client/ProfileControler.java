@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import org.cnam.jbrasserie.beans.Client;
 import org.cnam.jbrasserie.dao.client.ClientDao;
 import org.cnam.jbrasserie.dao.client.ClientDaoImplDb;
+import org.cnam.jbrasserie.session.Session;
 import org.cnam.jbrasserie.views.client.profile.ProfileTab;
 
 public class ProfileControler implements ActionListener {
@@ -13,6 +14,7 @@ public class ProfileControler implements ActionListener {
 	ProfileTab view;
 	ClientDao clientDao;
 	Client client;
+	ClientCatalogControler clientCatalogControler;
 	
 	public ProfileControler(ProfileTab view) {
 		this.view = view;
@@ -28,6 +30,8 @@ public class ProfileControler implements ActionListener {
 			if (id != 0) {
 				Client client = clientDao.findById(id);
 				if (client.getId() != null) {
+					Session.setCurrentUser(client);
+					Session.setCurrentOrder(null);
 					this.view.update(client);
 					this.view.changeFieldEditableState(true);
 				}

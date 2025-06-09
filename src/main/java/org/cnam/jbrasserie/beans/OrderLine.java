@@ -24,7 +24,11 @@ public class OrderLine {
 		return quantity;
 	}
 	public void setQuantity(Integer quantity) {
-		this.quantity = quantity;
+		if (this.beer.getStock() >= quantity) {
+			this.quantity = quantity;
+		} else {
+			throw new Error("Stock insuffisant !");
+		}
 	}
 	
 	
