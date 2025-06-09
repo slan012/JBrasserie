@@ -5,11 +5,16 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.WindowConstants;
 
+import org.cnam.jbrasserie.views.client.catalog.ClientCatalogTab;
 import org.cnam.jbrasserie.views.client.profile.ProfileTab;
 
 public class ClientView{
 	private static final long serialVersionUID = 1L;
-	JFrame frame;
+	private JFrame frame;
+	JPanel profilePane;
+	JPanel catalogPane;
+	JPanel checkoutPane;
+	JTabbedPane tabbedPane;
 	
 	public ClientView() {
 		// Main Frame
@@ -21,16 +26,16 @@ public class ClientView{
 		
 		// JTabbedPane
 		
-		JTabbedPane tabbedPane = new JTabbedPane();
+		this.tabbedPane = new JTabbedPane();
 		
-		JPanel profilePane = new ProfileTab();
-		JPanel catalogPane = new JPanel();
-		JPanel checkoutPane = new JPanel();
+		this.profilePane = new ProfileTab();
+		this.catalogPane = new ClientCatalogTab();
+		this.checkoutPane = new JPanel();
 		
-		tabbedPane.addTab("Profil", profilePane);
-		tabbedPane.addTab("Catalogue", catalogPane);
-		tabbedPane.addTab("Panier", checkoutPane);
-
+		this.tabbedPane.addTab("Profil", profilePane);
+		this.tabbedPane.addTab("Catalogue", catalogPane);
+		this.tabbedPane.addTab("Panier", checkoutPane);
+		
 		frame.getContentPane().add(tabbedPane);
 
 	}
@@ -39,8 +44,9 @@ public class ClientView{
 		frame.setVisible(true);
 	}
 	
-	public void setRows(String[][] data) {
-		
-	};
+	public void enableTabs() {
+		this.tabbedPane.setEnabledAt(tabbedPane.indexOfComponent(catalogPane), false);
+		this.tabbedPane.setEnabledAt(tabbedPane.indexOfComponent(checkoutPane), false);
+	}
 	
 }

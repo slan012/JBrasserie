@@ -18,6 +18,10 @@ import org.cnam.jbrasserie.controlers.client.ProfileControler;
 
 public class ProfileTab extends JPanel{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JTextField idField;
 	private JTextField firstNameField;
 	private JTextField lastNameField;
@@ -185,8 +189,6 @@ public class ProfileTab extends JPanel{
 		cityField.setText(client.getCity());
 		phoneField.setText(String.valueOf(client.getPhone()));
 		idField.setText(String.valueOf(client.getId()));
-		
-		
 	}
 	
 	public void changeFieldEditableState(boolean state) {
