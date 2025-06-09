@@ -5,6 +5,8 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.WindowConstants;
 
+import org.cnam.jbrasserie.views.client.profile.ProfileTab;
+
 public class ClientView{
 	private static final long serialVersionUID = 1L;
 	JFrame frame;
@@ -21,7 +23,7 @@ public class ClientView{
 		
 		JTabbedPane tabbedPane = new JTabbedPane();
 		
-		JPanel profilePane = new JPanel();
+		JPanel profilePane = new ProfileTab();
 		JPanel catalogPane = new JPanel();
 		JPanel checkoutPane = new JPanel();
 		
