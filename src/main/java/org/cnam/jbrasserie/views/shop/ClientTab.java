@@ -1,11 +1,13 @@
 package org.cnam.jbrasserie.views.shop;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.AbstractAction;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -20,7 +22,6 @@ import javax.swing.event.ListSelectionListener;
 import org.cnam.jbrasserie.beans.Client;
 import org.cnam.jbrasserie.controlers.shop.ClientControler;
 import org.cnam.jbrasserie.tablesModels.ClientTableModel;
-
 
 public class ClientTab extends JPanel{
 	
@@ -40,6 +41,10 @@ public class ClientTab extends JPanel{
 	private JTextField zipCodeField;
 	private JTextField cityField;
 	private JTextField phoneField;
+	
+	JButton updateButton;
+	JButton deleteButton;
+	JButton newButton;
 	
 	private List<JTextField> textFieldList;
 	
@@ -77,7 +82,10 @@ public class ClientTab extends JPanel{
 						int modelRow = clientTable.convertRowIndexToModel(selectedRow);
 						Client client = clientControler.handleClientRow((int) clientTableModel.getValueAt(modelRow, 0));
 						updateEditPanel(client);
-						
+						setTextFieldsEditable(true);
+						setUpdateButtonState(true);
+						setDeleteButtonState(true);
+						changeUpdateButtonName(false);
 					}
 				}
 			}
@@ -120,6 +128,12 @@ public class ClientTab extends JPanel{
 		return editedData;
 	}
 	
+	public void setTextFieldsEditable(boolean state) {
+		for (JTextField field : textFieldList) {
+			field.setEditable(state);
+		}
+	}
+	
 	public void buildEditPanel() {
 		
 		editPanel = new JPanel();
@@ -153,14 +167,32 @@ public class ClientTab extends JPanel{
 		textFieldList.add(phoneField);
 		
 		// Buttons
-		JButton submitButton = new JButton("Valider");
-		JButton deleteButton = new JButton("Supprimer");
-		JButton newButton =    new JButton("Nouveau");
+		this.updateButton = new JButton(new AbstractAction("Valider") {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				clientControler.updateClient();
+			}
+		});
 		
-		submitButton.addActionListener(this.clientControler);
-		deleteButton.addActionListener(this.clientControler);
-		newButton.addActionListener(this.clientControler);
+		this.deleteButton = new JButton(new AbstractAction("Supprimer") {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				clientControler.deleteClient();
+			}
+		});
 		
+		this.newButton = new JButton(new AbstractAction("Nouveau client") {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				clientControler.newClient();
+			}
+		});
+		
+
+		this.setTextFieldsEditable(false);
+		this.newButton.setEnabled(true);
+		this.deleteButton.setEnabled(false);
+		this.updateButton.setEnabled(false);
 
 		GroupLayout gl = new GroupLayout(editPanel);
 		gl.setHorizontalGroup(
@@ -183,7 +215,7 @@ public class ClientTab extends JPanel{
 								.addComponent(zipCodeField, Alignment.LEADING)
 								.addComponent(phoneField, Alignment.LEADING)))
 						.addGroup(gl.createSequentialGroup()
-							.addComponent(submitButton)
+							.addComponent(updateButton)
 							.addComponent(deleteButton)
 							.addComponent(newButton)))));
 		gl.setVerticalGroup(
@@ -208,12 +240,26 @@ public class ClientTab extends JPanel{
 						.addComponent(phoneLabel)
 						.addComponent(phoneField))
 					.addGroup(gl.createParallelGroup(Alignment.BASELINE)
-						.addComponent(submitButton)
+						.addComponent(updateButton)
 						.addComponent(deleteButton)
 						.addComponent(newButton))));
 		
 		editPanel.setLayout(gl);
 		gl.setAutoCreateGaps(true);
 		gl.setAutoCreateContainerGaps(true);
+	}
+	
+	// Buttons state 
+	public void setUpdateButtonState(boolean state) {
+		this.updateButton.setEnabled(state);
+	}
+	
+	public void setDeleteButtonState(boolean state) {
+		this.deleteButton.setEnabled(state);
+	}
+	
+	public void changeUpdateButtonName(boolean isNewBeer) {
+		String name = isNewBeer ? "Ajouter" : "Mettre à jour";
+		this.updateButton.setText(name);
 	}
 }

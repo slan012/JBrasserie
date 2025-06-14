@@ -1,7 +1,5 @@
 package org.cnam.jbrasserie.controlers.client;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -15,58 +13,51 @@ import org.cnam.jbrasserie.session.Session;
 import org.cnam.jbrasserie.tablesModels.OrderLinesTableModel;
 import org.cnam.jbrasserie.views.client.BasketTab;
 
-public class BasketControler implements ActionListener, PropertyChangeListener {
+public class BasketControler implements PropertyChangeListener {
 
 	private BasketTab view;
 	private OrderLinesTableModel basketTableModel;
-	private OrderDao orderDao = new OrderDaoImplDb();	
+	private OrderDao orderDao = new OrderDaoImplDb();
 	
 	public BasketControler(BasketTab view, OrderLinesTableModel tableModel) {
 		this.view = view;
 		this.basketTableModel = tableModel;
 		Session.getCurrentOrder().addPropertyChangeListener(this);
 		System.out.println(Session.getCurrentOrder());
-		
 	}
 	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		switch (e.getActionCommand()) {
-		case "Valider la commande":
-			if (!Session.getCurrentOrder().getLines().isEmpty()) {
-				System.out.println("Valider");
-				Session.getCurrentOrder().setClient(Session.getCurrentUser());
-				orderDao.insertOrder(Session.getCurrentOrder());
-				OrderNotifier.newOrderSubmitted();
-				basketTableModel.init();
-				Session.getCurrentOrder().setLines(new ArrayList<>());
-			} else {
-				System.out.println("Panier vide !");
-			}
-			break;
-		
-		case "Supprimer" :
-			int selectedLine = view.getSelectedRow();
-			if (selectedLine != -1) {
-				List<OrderLine> orderLines = Session.getCurrentOrder().getLines();
-				orderLines.remove(selectedLine);
-				basketTableModel.update(orderLines);
-			}
-			break;
-			
-		case "Vider le panier" :
+	public void confirmCommand() {
+		if (!Session.getCurrentOrder().getLines().isEmpty()) {
+			System.out.println("Valider");
+			Session.getCurrentOrder().setClient(Session.getCurrentUser());
+			orderDao.insertOrder(Session.getCurrentOrder());
+			OrderNotifier.newOrderSubmitted();
 			basketTableModel.init();
 			Session.getCurrentOrder().setLines(new ArrayList<>());
-			break;
-		
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + e.getActionCommand());
+		} else {
+			System.out.println("Panier vide !");
 		}
+	}
+	
+	public void deleteLine() {
+		int selectedLine = view.getSelectedRow();
+		if (selectedLine != -1) {
+			Session.getCurrentOrder().removeLine(selectedLine);;
+		}
+	}
+	
+	public void emptyBasket() {
+		Session.getCurrentOrder().setLines(new ArrayList<>());
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
+		boolean buttonsEnabled = false;
 		basketTableModel.update((List<OrderLine>) evt.getNewValue());
+		if (!Session.getCurrentOrder().getLines().isEmpty()) {
+			buttonsEnabled = true;
+		}
+		this.view.setButtonsState(buttonsEnabled);
 	}
 
 }

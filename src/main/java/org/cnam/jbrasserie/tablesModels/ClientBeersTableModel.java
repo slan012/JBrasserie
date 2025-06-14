@@ -5,12 +5,8 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 import org.cnam.jbrasserie.beans.Beer;
-import org.cnam.jbrasserie.dao.beer.BeerDao;
-import org.cnam.jbrasserie.dao.beer.BeerDaoImplDb;
 
 public class ClientBeersTableModel extends AbstractTableModel{
-
-	BeerDao beerDao = new BeerDaoImplDb();
 
 	private static final long serialVersionUID = 1L;
 	private String[] columnNames = {"Référence", "Nom", "Brasserie", "Style", "Alcool", "Prix €"};

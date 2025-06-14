@@ -1,7 +1,5 @@
 package org.cnam.jbrasserie.controlers.shop;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +9,7 @@ import org.cnam.jbrasserie.dao.beer.BeerDaoImplDb;
 import org.cnam.jbrasserie.tablesModels.BeersTableModel;
 import org.cnam.jbrasserie.views.shop.CatalogTab;
 
-public class CatalogControler implements ActionListener{
+public class CatalogControler{
 	
 	CatalogTab catalogView;
 	BeerDao beerDao = new BeerDaoImplDb();
@@ -28,58 +26,62 @@ public class CatalogControler implements ActionListener{
 		this.beerTableModel.update(beerList);
 	}
 	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		switch (e.getActionCommand()){
-		case ("Valider"): {
-			try {
-				editedBeer = handleEditedBeer();
-				if (!isNewBeer) {
-					this.beerDao.update(editedBeer);
-				} else {
-					this.beerDao.add(editedBeer);
-				}
-			} catch (NullPointerException e1){
-				System.out.println("Veuillez remplir tous les champs");
-			} catch (Exception e2) {
-				e2.printStackTrace();
-				System.out.println("Veuillez remplir tous les champs");
-			}
-			
-			this.catalogView.clearEditPanel();
-			editedBeer = null;
-			isNewBeer = false;
-			break;
-			}
-			
-		case ("Nouveau"): {
-			isNewBeer = true;
-			this.catalogView.clearEditPanel();
-			break;
-		}	
-		
-		case ("Supprimer"): {
-			if (catalogView.getSelectedRow() >= 0) {
-				editedBeer = handleEditedBeer();
-				beerDao.delete(editedBeer.getId());
-				this.catalogView.clearEditPanel();
+	// Add / Update
+	public void updateChanges() {
+		try {
+			editedBeer = handleEditedBeer();
+			if (!isNewBeer) {
+				this.beerDao.update(editedBeer);
 			} else {
-				System.out.println("Sélectionnez une ligne");
+				this.beerDao.add(editedBeer);
 			}
-			break;
-		}	
-		
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + e.getActionCommand());
+		} catch (NullPointerException e1){
+			System.out.println("Veuillez remplir tous les champs");
+		} catch (Exception e2) {
+			e2.printStackTrace();
+			System.out.println("Veuillez remplir tous les champs");
 		}
-		editedBeer = null;
-		beerList = beerDao.findAll();
-		this.beerTableModel.update(beerList);
 		
+		this.catalogView.clearEditPanel();
+		this.editedBeer = null;
+		this.isNewBeer = false;
+		this.catalogView.changeUpdateButtonName(isNewBeer);
+		this.catalogView.setTextFieldsState(isNewBeer);
+		this.catalogView.setDeleteButtonState(false);
+		this.catalogView.setUpdateButtonState(false);
+		this.
+		updateTable();
+	}
+	
+	public void newEntry() {
+		this.isNewBeer = true;
+		this.catalogView.clearEditPanel();
+		this.catalogView.changeUpdateButtonName(isNewBeer);
+		this.catalogView.setTextFieldsState(isNewBeer);
+		this.catalogView.setUpdateButtonState(true);
+		this.catalogView.setDeleteButtonState(false);
+		this.updateTable();
+	}
+	
+	public void deleteEntry() {
+		if (catalogView.getSelectedRow() >= 0) {
+			this.editedBeer = handleEditedBeer();
+			this.beerDao.delete(editedBeer.getId());
+			this.catalogView.clearEditPanel();
+		} else {
+			System.out.println("Sélectionnez une ligne");
+		}
+		this.updateTable();
+	}
+	
+	private void updateTable() {
+		this.editedBeer = null;
+		this.beerList = beerDao.findAll();
+		this.beerTableModel.update(beerList);
 	}
 	
 	public Beer handleBeerRow(int id) {
-		selectedBeer = beerDao.findById(id);
+		this.selectedBeer = beerDao.findById(id);
 		return selectedBeer;
 	}
 	
@@ -87,7 +89,7 @@ public class CatalogControler implements ActionListener{
 		Map<String, String> editedBeerRaw = catalogView.getEditedBeerData();
 		Beer editedBeer = new Beer();
 		try {
-		if (!isNewBeer) {
+		if (!this.isNewBeer) {
 			editedBeer.setId(Integer.parseInt(editedBeerRaw.get("id")));
 		}
 		editedBeer.setName(editedBeerRaw.get("name"));
