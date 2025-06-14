@@ -1,4 +1,4 @@
-package org.cnam.jbrasserie.views.shop.catalog;
+package org.cnam.jbrasserie.views.shop;
 
 import java.awt.BorderLayout;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import org.cnam.jbrasserie.beans.Beer;
 import org.cnam.jbrasserie.controlers.shop.CatalogControler;
-import org.cnam.jbrasserie.views.common.BeersTableModel;
+import org.cnam.jbrasserie.tablesModels.BeersTableModel;
 
 public class CatalogTab extends JPanel{
 	
@@ -53,7 +53,6 @@ public class CatalogTab extends JPanel{
 		beerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane scrollPane = new JScrollPane(beerTable);
 		beerTable.setFillsViewportHeight(true);
-
 
 		this.add(scrollPane, BorderLayout.CENTER);
 		this.add(editPanel, BorderLayout.SOUTH);
@@ -151,7 +150,6 @@ public class CatalogTab extends JPanel{
 		submitButton.addActionListener(catalogControler);
 		newButton.addActionListener(catalogControler);
 		deleteButton.addActionListener(catalogControler);
-		
 
 		GroupLayout gl = new GroupLayout(editPanel);
 		gl.setHorizontalGroup(
@@ -207,8 +205,5 @@ public class CatalogTab extends JPanel{
 		editPanel.setLayout(gl);
 		gl.setAutoCreateGaps(true);
 		gl.setAutoCreateContainerGaps(true);
-				
-
 	}
-	
 }

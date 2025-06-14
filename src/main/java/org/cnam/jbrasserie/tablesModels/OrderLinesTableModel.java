@@ -1,4 +1,4 @@
-package org.cnam.jbrasserie.views.shop.orders;
+package org.cnam.jbrasserie.tablesModels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,6 @@ public class OrderLinesTableModel extends AbstractTableModel {
 	private String[] columnNames = {"Référence", "Nom", "Brasserie", "Style", "Alccol", "PU €", "Quantité"};
 	
 	private List<OrderLine> orderLines;
-	
 	
 	@Override
 	public int getRowCount() {
@@ -75,5 +74,6 @@ public class OrderLinesTableModel extends AbstractTableModel {
 	
 	public void init() {
 		this.orderLines = new ArrayList<>();
+		fireTableDataChanged();
 	}
 }

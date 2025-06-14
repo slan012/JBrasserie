@@ -3,7 +3,7 @@ package org.cnam.jbrasserie.session;
 import org.cnam.jbrasserie.beans.Client;
 import org.cnam.jbrasserie.beans.Order;
 
-public class Session {
+public class Session{
 
 	private static Client currentUser;
 	private static Order currentOrder;
@@ -24,5 +24,9 @@ public class Session {
 	
 	public static void setCurrentOrder(Order currentOrder) {
 		Session.currentOrder = currentOrder;
+	}
+	
+	public static void setNewOrder() {
+		Session.currentOrder = new Order();
 	}
 }

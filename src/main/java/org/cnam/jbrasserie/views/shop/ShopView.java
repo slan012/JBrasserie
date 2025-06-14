@@ -5,16 +5,11 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.WindowConstants;
 
-import org.cnam.jbrasserie.views.shop.catalog.CatalogTab;
-import org.cnam.jbrasserie.views.shop.clients.ClientTab;
-import org.cnam.jbrasserie.views.shop.orders.OrderTab;
-
-public class ShopView extends JFrame{
+public class ShopView extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	
 	JFrame frame;
-	
 	
 	public ShopView() {
 		

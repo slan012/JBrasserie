@@ -10,8 +10,8 @@ import org.cnam.jbrasserie.beans.OrderLine;
 import org.cnam.jbrasserie.dao.beer.BeerDao;
 import org.cnam.jbrasserie.dao.beer.BeerDaoImplDb;
 import org.cnam.jbrasserie.session.Session;
-import org.cnam.jbrasserie.views.client.catalog.ClientBeersTableModel;
-import org.cnam.jbrasserie.views.client.catalog.ClientCatalogTab;
+import org.cnam.jbrasserie.tablesModels.ClientBeersTableModel;
+import org.cnam.jbrasserie.views.client.ClientCatalogTab;
 
 public class ClientCatalogControler implements ActionListener {
 
@@ -19,9 +19,7 @@ public class ClientCatalogControler implements ActionListener {
 	private ClientBeersTableModel beerTableModel;
 	private BeerDao beerDao;
 	private List<Beer> beers;
-	private Order order;
-
-
+	
 	public ClientCatalogControler(ClientCatalogTab clientCatalogTab, ClientBeersTableModel beerTableModel) {
 		this.view = clientCatalogTab;
 		this.beerTableModel = beerTableModel;
@@ -32,35 +30,20 @@ public class ClientCatalogControler implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (Session.getCurrentUser() != null) {
-			if (Session.getCurrentOrder() == null) {
-				order = new Order();
-				Session.setCurrentOrder(order);
-			} else {
-				order = Session.getCurrentOrder();
-			}
-			int selectedRow = view.getSelectedRow();
-			int quantity = view.getQuantity();
-			
-			Beer beer = beerDao.findById((int) beerTableModel.getValueAt(selectedRow, 0));
-			
-			OrderLine orderLine = new OrderLine();
-			try {
-				orderLine.setBeer(beer);
-				orderLine.setQuantity(quantity);
-				order.addLine(orderLine);
-			} catch (Exception e2) {
-				e2.printStackTrace();
-			}
-			
-			System.out.println(Session.getCurrentUser().getId());
-		} else {
-			System.out.println("Aucun utilisateur connecté");
+		
+		int selectedRow = view.getSelectedRow();
+		int quantity = view.getQuantity();
+		Order order = Session.getCurrentOrder();
+		Beer beer = beerDao.findById((int) beerTableModel.getValueAt(selectedRow, 0));
+		System.out.print("Order :" + order);
+		OrderLine orderLine = new OrderLine();
+		try {
+			orderLine.setBeer(beer);
+			orderLine.setQuantity(quantity);
+			order.addLine(orderLine);
+		} catch (Exception e2) {
+			e2.printStackTrace();
 		}
-		for (OrderLine line : order.getLines()) {
-			System.out.println("Beer : " + line.getBeer().getName());
-		}
-
 	}
 }
 

@@ -1,5 +1,7 @@
 package org.cnam.jbrasserie.beans;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -10,9 +12,11 @@ public class Order {
 	private Date date;
 	private List<OrderLine> lines;
 	private Double total;
+	private PropertyChangeSupport support;
 	
 	public Order() {
-		this.lines = new ArrayList<>();
+		lines = new ArrayList<>();
+		this.support = new PropertyChangeSupport(this);
 	}
 	
 	public Integer getIdOrder() {
@@ -44,11 +48,16 @@ public class Order {
 	}
 	
 	public void setLines(List<OrderLine> lines) {
+		List<OrderLine> oldList = new ArrayList<>(lines);
 		this.lines = lines;
+		this.support.firePropertyChange("lines", oldList, lines);
 	}
 	
 	public void addLine(OrderLine line) {
-		this.lines.add(line);
+		List<OrderLine> oldList = new ArrayList<>(lines);
+		lines.add(line);
+		System.out.println(this);
+		this.support.firePropertyChange("lines", oldList, lines);
 	}
 	
 	public double getTotal() {
@@ -57,5 +66,9 @@ public class Order {
 
 	public void setTotal(Double total) {
 		this.total = total;
+	}
+	
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		this.support.addPropertyChangeListener(listener);
 	}
 }

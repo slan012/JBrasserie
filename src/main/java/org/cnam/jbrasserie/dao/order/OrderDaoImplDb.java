@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.cnam.jbrasserie.beans.Client;
 import org.cnam.jbrasserie.beans.Order;
+import org.cnam.jbrasserie.beans.OrderLine;
 import org.cnam.jbrasserie.database.DBConnection;
 
 public class OrderDaoImplDb implements OrderDao{
@@ -112,39 +113,53 @@ public class OrderDaoImplDb implements OrderDao{
 	@Override
 	public void insertOrder(Order order) {
 		int updatedRows = 0;
-		String query = "INSERT INTO clientorder(date, idClient) "
+		Connection connection = DBConnection.getConnection();
+		String queryOrder = "INSERT INTO clientorder(date, idClient) "
 				+ "VALUES(CURDATE(), ?);";
 		
-		try(Connection connection = DBConnection.getConnection();
-			PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)){
+		String queryLine = "INSERT INTO orderline(idOrder, idBeer, quantity) VALUES(?, ?, ?);";
+		
+		try(
+			PreparedStatement preparedStatementOrder = connection.prepareStatement(queryOrder, Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement preparedStatementLine = connection.prepareStatement(queryLine, Statement.RETURN_GENERATED_KEYS)){
 			
 			connection.setAutoCommit(false);
 			
-			preparedStatement.setInt(1,order.getClient().getId());
-		
-			updatedRows = preparedStatement.executeUpdate();
+			// Insert order 
+			preparedStatementOrder.setInt(1,order.getClient().getId());
+			updatedRows = preparedStatementOrder.executeUpdate();
+			
+			ResultSet generatedKeys = preparedStatementOrder.getGeneratedKeys();
+			
+			if (generatedKeys.next()) {
+				order.setIdOrder(generatedKeys.getInt(1));
+			} else {
+				System.err.print("Inserting beer failed, no Id fetched");
+			}
+			
+			// Insert lines
+			
+			for (OrderLine line : order.getLines()) {
+				preparedStatementLine.setInt(1, order.getIdOrder());
+				preparedStatementLine.setInt(2, line.getBeer().getId());
+				preparedStatementLine.setInt(3, line.getQuantity());
+				preparedStatementLine.addBatch();
+			}
+			
+			preparedStatementLine.executeBatch();
+			
 			connection.commit();
 			System.out.print("commit OK");
-			if (updatedRows == 0) {
-				throw new SQLException("Inserting order failed, no row added");
-			}
 		
-			try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()){
-				if (generatedKeys.next()) {
-					order.setIdOrder(generatedKeys.getInt(1));
-				} else {
-					throw new SQLException("Inserting beer failed, no Id fetched");
-				}
-			} catch (SQLException e) {
-				System.err.print("SQL request error : ");
-				e.printStackTrace();
+		}catch (Exception e) {
+			try {
 				connection.rollback();
-			} 
-		} catch (SQLException e) {
+			} catch (SQLException e1) {
+
+				e1.printStackTrace();
+			}
 			e.printStackTrace();
 		}
-
-		
 	}
 
 		

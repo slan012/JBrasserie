@@ -8,13 +8,11 @@ import java.util.Map;
 import org.cnam.jbrasserie.beans.Client;
 import org.cnam.jbrasserie.dao.client.ClientDao;
 import org.cnam.jbrasserie.dao.client.ClientDaoImplDb;
-import org.cnam.jbrasserie.views.shop.clients.ClientTab;
-import org.cnam.jbrasserie.views.shop.clients.ClientTableModel;
+import org.cnam.jbrasserie.tablesModels.ClientTableModel;
+import org.cnam.jbrasserie.views.shop.ClientTab;
 
 public class ClientControler implements ActionListener{
 	
-	
-
 	ClientTab clientView;
 	ClientDao clientDao = new ClientDaoImplDb();
 	Client selectedClient;
@@ -29,7 +27,6 @@ public class ClientControler implements ActionListener{
 		clients = clientDao.findAll();
 		clientTableModel.update(clients);
 	}
-	
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -77,7 +74,6 @@ public class ClientControler implements ActionListener{
 		editedClient = null;
 		clients = this.clientDao.findAll();
 		clientTableModel.update(clients);
-		
 	}
 	
 	public Client handleClientRow(int id) {
@@ -99,6 +95,4 @@ public class ClientControler implements ActionListener{
 		editedClient.setPhone(Integer.parseInt(editedClientRaw.get("phone")));
 		return editedClient;
 	}
-	
-	
 }
