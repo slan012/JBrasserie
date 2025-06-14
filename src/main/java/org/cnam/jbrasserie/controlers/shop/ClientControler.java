@@ -35,17 +35,17 @@ public class ClientControler {
 			} else {
 				this.clientDao.add(editedClient);
 			}
+			this.clientView.clearEditPanel();
+			this.clientView.setTextFieldsEditable(false);
+			this.clientView.setUpdateButtonState(false);
+			this.clientView.setDeleteButtonState(false);
+			this.clientView.changeUpdateButtonName(true);
 		} catch (NullPointerException e1) {
 			System.out.println("Veuillez remplir tous les champs");
 		} catch (Exception e2) {
 			System.out.println("Veuillez remplir tous les champs");
 		}
 
-		this.clientView.clearEditPanel();
-		this.clientView.setTextFieldsEditable(false);
-		this.clientView.setUpdateButtonState(false);
-		this.clientView.setDeleteButtonState(false);
-		this.clientView.changeUpdateButtonName(true);
 		editedClient = null;
 		isNewClient = false;
 		updateTable();
