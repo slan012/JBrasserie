@@ -1,11 +1,13 @@
 package org.cnam.jbrasserie.views.shop;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.AbstractAction;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -21,6 +23,7 @@ import org.cnam.jbrasserie.beans.Beer;
 import org.cnam.jbrasserie.controlers.shop.CatalogControler;
 import org.cnam.jbrasserie.tablesModels.BeersTableModel;
 
+@SuppressWarnings("serial")
 public class CatalogTab extends JPanel{
 	
 	private static final long serialVersionUID = 1L;
@@ -37,6 +40,10 @@ public class CatalogTab extends JPanel{
 	private JTextField alcoholField;
 	private JTextField priceField;
 	private JTextField stockField;
+	
+	JButton updateButton;
+	JButton deleteButton;
+	JButton newEntryButton;
 	
 	private List<JTextField> textFieldList;
 	
@@ -69,7 +76,10 @@ public class CatalogTab extends JPanel{
 						int modelRow = beerTable.convertRowIndexToModel(selectedRow);
 						Beer beer = catalogControler.handleBeerRow((int) beerTableModel.getValueAt(modelRow, 0));
 						updateEditPanel(beer);
-						
+						setTextFieldsState(true);
+						changeUpdateButtonName(false);
+						setUpdateButtonState(true);
+						setDeleteButtonState(true);
 					}
 				}
 			}
@@ -110,6 +120,25 @@ public class CatalogTab extends JPanel{
 		return editedData;
 	}
 	
+	public void setTextFieldsState(boolean state) {
+		for (JTextField field : textFieldList) {
+			field.setEditable(state);
+		}
+	}
+	
+	public void changeUpdateButtonName(boolean isNewBeer) {
+		String name = isNewBeer ? "Ajouter" : "Mettre à jour";
+		this.updateButton.setText(name);
+	}
+	
+	// Buttons state 
+	public void setUpdateButtonState(boolean state) {
+		this.updateButton.setEnabled(state);
+	}
+	public void setDeleteButtonState(boolean state) {
+		this.deleteButton.setEnabled(state);
+	}
+
 	public void buildEditPanel() {
 		
 		this.editPanel = new JPanel();
@@ -141,15 +170,32 @@ public class CatalogTab extends JPanel{
 		this.textFieldList.add(this.alcoholField);
 		this.textFieldList.add(this.priceField);
 		this.textFieldList.add(this.stockField);
-				
-		// Buttons
-		JButton submitButton = new JButton("Valider");
-		JButton deleteButton = new JButton("Supprimer");
-		JButton newButton =    new JButton("Nouveau");
 		
-		submitButton.addActionListener(catalogControler);
-		newButton.addActionListener(catalogControler);
-		deleteButton.addActionListener(catalogControler);
+		// Button "Ajouter" / "Mettre à jour"
+		updateButton = new JButton(new AbstractAction("Mettre à jour") {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				catalogControler.updateChanges();			
+			}
+		});
+		
+		deleteButton = new JButton(new AbstractAction("Supprimer") {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				catalogControler.deleteEntry();			
+			}
+		});
+		
+		newEntryButton = new JButton(new AbstractAction("Nouvelle entrée") {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				catalogControler.newEntry();			
+			}
+		});
+		
+		setTextFieldsState(false);
+		setUpdateButtonState(false);
+		setDeleteButtonState(false);
 
 		GroupLayout gl = new GroupLayout(editPanel);
 		gl.setHorizontalGroup(
@@ -172,8 +218,8 @@ public class CatalogTab extends JPanel{
 								.addComponent(alcoholField, Alignment.LEADING)
 								.addComponent(stockField, Alignment.LEADING)))
 						.addGroup(gl.createSequentialGroup()
-							.addComponent(newButton)
-							.addComponent(submitButton)
+							.addComponent(newEntryButton)
+							.addComponent(updateButton)
 							.addComponent(deleteButton)))));
 		gl.setVerticalGroup(
 			gl.createParallelGroup(Alignment.LEADING)
@@ -198,8 +244,8 @@ public class CatalogTab extends JPanel{
 						.addComponent(stockField))
 
 					.addGroup(gl.createParallelGroup(Alignment.BASELINE)
-						.addComponent(newButton)
-						.addComponent(submitButton)
+						.addComponent(newEntryButton)
+						.addComponent(updateButton)
 						.addComponent(deleteButton))));
 		
 		editPanel.setLayout(gl);

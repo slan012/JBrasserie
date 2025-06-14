@@ -41,11 +41,15 @@ public class ClientView{
 	}
 	
 	public void newTabs() {
-		this.tabbedPane.remove(checkoutPane);
-		this.tabbedPane.remove(catalogPane);
+		this.removeTabs();
 		this.catalogPane = new ClientCatalogTab();
 		this.checkoutPane = new BasketTab();
 		this.tabbedPane.addTab("Catalogue", catalogPane);
 		this.tabbedPane.addTab("Panier", checkoutPane);
+	}
+	
+	public void removeTabs() {
+		this.tabbedPane.remove(checkoutPane);
+		this.tabbedPane.remove(catalogPane);
 	}
 }

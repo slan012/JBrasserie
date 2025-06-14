@@ -1,7 +1,8 @@
 package org.cnam.jbrasserie.views.client;
 
 import java.awt.BorderLayout;
-
+import java.awt.event.ActionEvent;
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -10,18 +11,23 @@ import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import org.cnam.jbrasserie.controlers.client.ClientCatalogControler;
 import org.cnam.jbrasserie.tablesModels.ClientBeersTableModel;
 
+@SuppressWarnings("serial")
 public class ClientCatalogTab extends JPanel{
 	
 	private static final long serialVersionUID = 1L;
 	private JTable beerTable;
 	private ClientBeersTableModel beerTableModel;
 	private ClientCatalogControler catalogControler;
+	
 	JSpinner quantitySpinner;
 	JLabel quantityLabel;
+	JButton addButton;
 	
 	public ClientCatalogTab() {
 		this.setLayout(new BorderLayout());
@@ -46,8 +52,14 @@ public class ClientCatalogTab extends JPanel{
 		
 		// Button
 		
-		JButton addButton = new JButton("Ajouter au panier");
-		addButton.addActionListener(catalogControler);
+		addButton = new JButton(new AbstractAction("Ajouter au panier") {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				catalogControler.addLineToBasket();
+			}
+		});
+
+		addButton.setEnabled(false);
 		
 		// Layout
 		
@@ -58,6 +70,16 @@ public class ClientCatalogTab extends JPanel{
 		this.add(scrollPane, BorderLayout.NORTH);
 		this.add(addToBasketPanel, BorderLayout.CENTER);
 		
+		// Order table listener
+		
+		beerTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				setAddButtonState(true);
+			}
+		});
+		
 	}
 	
 	public int getSelectedRow() {
@@ -66,11 +88,15 @@ public class ClientCatalogTab extends JPanel{
 			int modelRow = beerTable.convertRowIndexToModel(selectedRow);
 			return modelRow;
 		}
-		return 0;
+		return selectedRow;
 	}
 	
 	public int getQuantity() {
 		return (int) this.quantitySpinner.getValue();
+	}
+	
+	public void setAddButtonState(boolean state) {
+		this.addButton.setEnabled(state);
 	}
 }
 

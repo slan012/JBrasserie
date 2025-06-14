@@ -1,11 +1,13 @@
 package org.cnam.jbrasserie.views.client;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.AbstractAction;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -16,6 +18,7 @@ import javax.swing.JTextField;
 import org.cnam.jbrasserie.beans.Client;
 import org.cnam.jbrasserie.controlers.client.ProfileControler;
 
+@SuppressWarnings("serial")
 public class ProfileTab extends JPanel{
 	
 	private static final long serialVersionUID = 1L;
@@ -27,12 +30,17 @@ public class ProfileTab extends JPanel{
 	private JTextField cityField;
 	private JTextField phoneField;
 	
-	List<JTextField> fieldList;
+	private JButton modifyButton;
+	private JButton connectButton;
+	
+	private List<JTextField> fieldList;
 	
 	private JTextField loginField;
 	
-	ProfileControler profileControler;
-	ClientView clientView;
+	JPanel loginPanel;
+	
+	private ProfileControler profileControler;
+	private ClientView clientView;
 	
 	public ProfileTab(ClientView view) {
 		
@@ -41,22 +49,34 @@ public class ProfileTab extends JPanel{
 		
 		// Login panel
 		
-		JPanel loginPanel = new JPanel();
+		this.loginPanel = new JPanel();
 		
 		JLabel login = new JLabel("Numéro client :");
 		loginField = new JTextField();
 		loginField.setColumns(20);
-		JButton connectButton = new JButton("Se connecter");
-		connectButton.addActionListener(this.profileControler);
 		
-		loginPanel.add(login);
-		loginPanel.add(loginField);
-		loginPanel.add(connectButton);
+		this.connectButton = new JButton(new AbstractAction("Se connecter") {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				profileControler.connectUser();
+			}
+		});
+		
+		this.loginPanel.add(login);
+		this.loginPanel.add(loginField);
+		this.loginPanel.add(connectButton);
 		
 		// Edit profile panel
 		
 		JPanel editProfilePanel = new JPanel();
-		
+
+		this.modifyButton = new JButton(new AbstractAction("Mettre à jour") {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				profileControler.updateUser();
+			}
+		});
+
 		GroupLayout gl = new GroupLayout(editProfilePanel);
 		editProfilePanel.setLayout(gl);
 		
@@ -86,11 +106,7 @@ public class ProfileTab extends JPanel{
 		this.fieldList.add(cityField);
 		this.fieldList.add(phoneField);
 		
-		changeFieldEditableState(false);
-		
-		// Buttons
-		JButton submitButton = new JButton("Modifier");
-		submitButton.addActionListener(this.profileControler);
+		setEditPanelEditable(false);
 		
 		gl.setHorizontalGroup(
 			gl.createParallelGroup(Alignment.LEADING)
@@ -112,7 +128,7 @@ public class ProfileTab extends JPanel{
 								.addComponent(zipCodeField, Alignment.LEADING)
 								.addComponent(phoneField, Alignment.LEADING)))
 						.addGroup(gl.createSequentialGroup()
-							.addComponent(submitButton)))));
+							.addComponent(modifyButton)))));
 		gl.setVerticalGroup(
 			gl.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl.createSequentialGroup()
@@ -135,7 +151,7 @@ public class ProfileTab extends JPanel{
 						.addComponent(phoneLabel)
 						.addComponent(phoneField))
 					.addGroup(gl.createParallelGroup(Alignment.BASELINE)
-						.addComponent(submitButton))));
+						.addComponent(modifyButton))));
 		
 		
 		gl.setAutoCreateGaps(true);
@@ -146,7 +162,7 @@ public class ProfileTab extends JPanel{
 		BorderLayout bl = new BorderLayout();
 		this.setLayout(bl);
 		
-		this.add(loginPanel, BorderLayout.NORTH);
+		this.add(this.loginPanel, BorderLayout.NORTH);
 		this.add(editProfilePanel, BorderLayout.CENTER);
 				
 	}
@@ -164,14 +180,8 @@ public class ProfileTab extends JPanel{
 		return editedData;
 	}
 
-	public int getConnexionId() {
-		try {
-			return (Integer.parseInt(this.loginField.getText()));
-		} catch (Exception e) {
-			System.err.println("Identifiant invalide");
-			e.printStackTrace();
-		}	
-		return 0;
+	public String getConnexionId() {
+		return this.loginField.getText();
 	}
 	
 	public void clearClientField() {
@@ -190,9 +200,10 @@ public class ProfileTab extends JPanel{
 		idField.setText(String.valueOf(client.getId()));
 	}
 	
-	public void changeFieldEditableState(boolean state) {
+	public void setEditPanelEditable(boolean state) {
 		for (JTextField field : fieldList) {
 			field.setEditable(state);
 		}
+		this.modifyButton.setEnabled(state);
 	}
 }

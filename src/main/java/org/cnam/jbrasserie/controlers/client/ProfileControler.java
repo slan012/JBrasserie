@@ -1,7 +1,6 @@
 package org.cnam.jbrasserie.controlers.client;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.Map;
 
 import org.cnam.jbrasserie.beans.Client;
 import org.cnam.jbrasserie.beans.Order;
@@ -11,51 +10,72 @@ import org.cnam.jbrasserie.session.Session;
 import org.cnam.jbrasserie.views.client.ClientView;
 import org.cnam.jbrasserie.views.client.ProfileTab;
 
-public class ProfileControler implements ActionListener {
+public class ProfileControler {
 
 	ProfileTab profileView;
 	ClientView clientView;
 	ClientDao clientDao;
+	Client editedClient;
 
 	public ProfileControler(ProfileTab profileView, ClientView clientView) {
 		this.profileView = profileView;
 		this.clientView = clientView;
 		this.clientDao = new ClientDaoImplDb();
 	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		switch (e.getActionCommand()) {
-		case ("Se connecter"):
-			int id = profileView.getConnexionId();
-			System.out.println("Connexion avec l'identifiant : " + id);
-			if (id != 0) {
-					Client client = clientDao.findById(id);
+	
+	public void updateUser() {
+		editedClient = handleEditedClient();
+		clientDao.update(editedClient);
+	}
+	
+	public void connectUser() {
+		try {
+			int id = Integer.parseInt(profileView.getConnexionId());
+			System.out.println(id);
+			Client client = clientDao.findById(id);
+			if (client.getId() != null) {
 				System.out.println(client.getLastName());
-				if (client.getId() != null) {
-					if (Session.getCurrentUser() == null || !Session.getCurrentUser().getId().equals(client.getId())) {
-						Session.setCurrentUser(client);
-						Session.setCurrentOrder(new Order());
-						
-					}
-					clientView.newTabs();
-					this.profileView.update(client);
-					this.profileView.changeFieldEditableState(true);
-					System.out.print(Session.getCurrentOrder());
+				
+				if (Session.getCurrentUser() == null || !Session.getCurrentUser().getId().equals(client.getId())) {
+					System.out.println("Connexion avec l'identifiant : " + id);
+					Session.setCurrentUser(client);
+					Session.setCurrentOrder(new Order());
 				}
+				
+				clientView.newTabs();
+				this.profileView.update(client);
+				this.profileView.setEditPanelEditable(true);
+				System.out.print(Session.getCurrentOrder());
+				
 			} else {
-				this.profileView.clearClientField();
-				this.profileView.changeFieldEditableState(false);
-				System.out.print("Identifiant invalide");
-
+					this.resetViews();
+					System.out.print("Ce compte n'existe pas");
 			}
-			System.out.println("Connexion");
-			break;
-		case ("Modifier"):
-			System.out.println("Modifier");
-			break;
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + e.getActionCommand());
+				
+		} catch (NumberFormatException e2) {
+			this.resetViews();
+			System.out.println("Identifiant invalide");
 		}
 	}
+	
+	public Client handleEditedClient() {
+		Map<String, String> editedClientRaw = profileView.getEditedClientData();
+		editedClient = new Client();
+		editedClient.setId(Integer.parseInt(editedClientRaw.get("id")));
+		editedClient.setFirstName(editedClientRaw.get("firstName"));
+		editedClient.setLastName(editedClientRaw.get("lastName"));
+		editedClient.setAdress(editedClientRaw.get("adress"));
+		editedClient.setZipCode(Integer.parseInt(editedClientRaw.get("zipCode")));
+		editedClient.setCity(editedClientRaw.get("city"));
+		editedClient.setPhone(Integer.parseInt(editedClientRaw.get("phone")));
+		return editedClient;
+	}
+	
+	private void resetViews() {
+		this.profileView.clearClientField();
+		this.profileView.setEditPanelEditable(false);
+		this.clientView.removeTabs();
+	}
+
+	
 }

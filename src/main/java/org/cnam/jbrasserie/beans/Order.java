@@ -48,15 +48,26 @@ public class Order {
 	}
 	
 	public void setLines(List<OrderLine> lines) {
-		List<OrderLine> oldList = new ArrayList<>(lines);
+		List<OrderLine> oldList = new ArrayList<>(this.lines);
 		this.lines = lines;
+		System.out.println("OLD LINES : " + oldList);
+		System.out.println("NEW LINES : " + lines);
 		this.support.firePropertyChange("lines", oldList, lines);
 	}
 	
 	public void addLine(OrderLine line) {
-		List<OrderLine> oldList = new ArrayList<>(lines);
+		List<OrderLine> oldList = new ArrayList<>(this.lines);
 		lines.add(line);
-		System.out.println(this);
+		System.out.println("OLD LINES add: " + oldList);
+		System.out.println("NEW LINES add: " + lines);
+		this.support.firePropertyChange("lines", oldList, lines);
+	}
+	
+	public void removeLine(int lineIndex) {
+		List<OrderLine> oldList = new ArrayList<>(this.lines);
+		lines.remove(lineIndex);
+		System.out.println("OLD LINES remove: " + oldList);
+		System.out.println("NEW LINES remove: " + lines);
 		this.support.firePropertyChange("lines", oldList, lines);
 	}
 	
