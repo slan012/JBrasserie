@@ -1,4 +1,4 @@
-package org.cnam.jbrasserie.views.common;
+package org.cnam.jbrasserie.tablesModels;
 
 import java.util.List;
 
@@ -10,13 +10,11 @@ import org.cnam.jbrasserie.dao.beer.BeerDaoImplDb;
 
 public class BeersTableModel extends AbstractTableModel{
 
-	
 	BeerDao beerDao = new BeerDaoImplDb();
 
 	private static final long serialVersionUID = 1L;
 	private String[] columnNames = {"Référence", "Nom", "Brasserie", "Style", "Alcool", "PU €", "Stock"};
 	private List<Beer> beers;
-	
 	
 	@Override
 	public int getRowCount() {

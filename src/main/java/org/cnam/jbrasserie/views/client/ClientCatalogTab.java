@@ -1,4 +1,4 @@
-package org.cnam.jbrasserie.views.client.catalog;
+package org.cnam.jbrasserie.views.client;
 
 import java.awt.BorderLayout;
 
@@ -12,12 +12,10 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
 
 import org.cnam.jbrasserie.controlers.client.ClientCatalogControler;
+import org.cnam.jbrasserie.tablesModels.ClientBeersTableModel;
 
 public class ClientCatalogTab extends JPanel{
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private JTable beerTable;
 	private ClientBeersTableModel beerTableModel;
@@ -30,14 +28,12 @@ public class ClientCatalogTab extends JPanel{
 		beerTableModel = new ClientBeersTableModel();
 		this.catalogControler = new ClientCatalogControler(this, beerTableModel);
 		
-		
 		// Beer table
 		
 		beerTable = new JTable(beerTableModel);
 		beerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane scrollPane = new JScrollPane(beerTable);
 		beerTable.setFillsViewportHeight(true);
-		
 		
 		// Add To Basket panel
 		
@@ -76,6 +72,5 @@ public class ClientCatalogTab extends JPanel{
 	public int getQuantity() {
 		return (int) this.quantitySpinner.getValue();
 	}
-		
 }
 

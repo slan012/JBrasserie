@@ -23,6 +23,7 @@ public class OrderLine {
 	public Integer getQuantity() {
 		return quantity;
 	}
+	
 	public void setQuantity(Integer quantity) {
 		if (this.beer.getStock() >= quantity) {
 			this.quantity = quantity;
@@ -30,6 +31,4 @@ public class OrderLine {
 			throw new Error("Stock insuffisant !");
 		}
 	}
-	
-	
 }

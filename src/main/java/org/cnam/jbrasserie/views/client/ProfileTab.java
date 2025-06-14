@@ -1,4 +1,4 @@
-package org.cnam.jbrasserie.views.client.profile;
+package org.cnam.jbrasserie.views.client;
 
 import java.awt.BorderLayout;
 import java.util.ArrayList;
@@ -18,9 +18,6 @@ import org.cnam.jbrasserie.controlers.client.ProfileControler;
 
 public class ProfileTab extends JPanel{
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private JTextField idField;
 	private JTextField firstNameField;
@@ -35,10 +32,12 @@ public class ProfileTab extends JPanel{
 	private JTextField loginField;
 	
 	ProfileControler profileControler;
+	ClientView clientView;
 	
-	public ProfileTab() {
+	public ProfileTab(ClientView view) {
 		
-		profileControler = new ProfileControler(this);
+		this.clientView = view;
+		profileControler = new ProfileControler(this, clientView);
 		
 		// Login panel
 		
@@ -196,5 +195,4 @@ public class ProfileTab extends JPanel{
 			field.setEditable(state);
 		}
 	}
-	
 }

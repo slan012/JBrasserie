@@ -1,4 +1,4 @@
-package org.cnam.jbrasserie.views.shop.clients;
+package org.cnam.jbrasserie.views.shop;
 
 import java.awt.BorderLayout;
 import java.util.ArrayList;
@@ -19,13 +19,11 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import org.cnam.jbrasserie.beans.Client;
 import org.cnam.jbrasserie.controlers.shop.ClientControler;
+import org.cnam.jbrasserie.tablesModels.ClientTableModel;
 
 
 public class ClientTab extends JPanel{
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	private ClientControler clientControler;
@@ -50,7 +48,6 @@ public class ClientTab extends JPanel{
 		clientTableModel = new ClientTableModel();
 		this.clientControler = new ClientControler(this, clientTableModel);
 		this.setLayout(new BorderLayout());
-
 		
 		// Table
 
@@ -89,7 +86,6 @@ public class ClientTab extends JPanel{
 
 	}
 	
-
 	public void updateEditPanel(Client client) {
 		idField.setText(String.valueOf(client.getId()));
 		firstNameField.setText(client.getFirstName());
@@ -219,6 +215,5 @@ public class ClientTab extends JPanel{
 		editPanel.setLayout(gl);
 		gl.setAutoCreateGaps(true);
 		gl.setAutoCreateContainerGaps(true);
-
 	}
 }

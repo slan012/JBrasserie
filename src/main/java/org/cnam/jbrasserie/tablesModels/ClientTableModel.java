@@ -1,12 +1,8 @@
-package org.cnam.jbrasserie.views.shop.clients;
+package org.cnam.jbrasserie.tablesModels;
 
 import java.util.List;
-
 import javax.swing.table.AbstractTableModel;
-
 import org.cnam.jbrasserie.beans.Client;
-import org.cnam.jbrasserie.dao.client.ClientDao;
-import org.cnam.jbrasserie.dao.client.ClientDaoImplDb;
 
 public class ClientTableModel extends AbstractTableModel {
 

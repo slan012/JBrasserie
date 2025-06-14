@@ -8,13 +8,11 @@ import java.util.Map;
 import org.cnam.jbrasserie.beans.Beer;
 import org.cnam.jbrasserie.dao.beer.BeerDao;
 import org.cnam.jbrasserie.dao.beer.BeerDaoImplDb;
-import org.cnam.jbrasserie.views.common.BeersTableModel;
-import org.cnam.jbrasserie.views.shop.catalog.CatalogTab;
+import org.cnam.jbrasserie.tablesModels.BeersTableModel;
+import org.cnam.jbrasserie.views.shop.CatalogTab;
 
 public class CatalogControler implements ActionListener{
 	
-	
-
 	CatalogTab catalogView;
 	BeerDao beerDao = new BeerDaoImplDb();
 	Beer selectedBeer;
@@ -29,7 +27,6 @@ public class CatalogControler implements ActionListener{
 		beerList = beerDao.findAll();
 		this.beerTableModel.update(beerList);
 	}
-	
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -105,6 +102,4 @@ public class CatalogControler implements ActionListener{
 		}
 		return editedBeer;
 	}
-	
-	
 }

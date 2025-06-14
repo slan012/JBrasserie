@@ -1,4 +1,4 @@
-package org.cnam.jbrasserie.views.shop.orders;
+package org.cnam.jbrasserie.tablesModels;
 
 import java.util.List;
 
@@ -8,11 +8,9 @@ import org.cnam.jbrasserie.beans.Order;
 
 public class OrderTableModel extends AbstractTableModel{
 	
-	
 	private static final long serialVersionUID = 1L;
 	private String[] columnNames = {"Référence commande", "Référence client", "Nom", "Prénom", "Ville", "Téléphone", "Montant"};
 	private List<Order> orders;
-	
 	
 	@Override
 	public int getRowCount() {

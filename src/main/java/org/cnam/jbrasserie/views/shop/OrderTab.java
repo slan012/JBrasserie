@@ -1,14 +1,12 @@
-package org.cnam.jbrasserie.views.shop.orders;
+package org.cnam.jbrasserie.views.shop;
 
 import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
@@ -16,8 +14,12 @@ import javax.swing.event.ListSelectionListener;
 
 import org.cnam.jbrasserie.beans.OrderLine;
 import org.cnam.jbrasserie.controlers.shop.OrderControler;
+import org.cnam.jbrasserie.observers.OrderNotifier;
+import org.cnam.jbrasserie.observers.OrderObserver;
+import org.cnam.jbrasserie.tablesModels.OrderLinesTableModel;
+import org.cnam.jbrasserie.tablesModels.OrderTableModel;
 
-public class OrderTab extends JPanel{
+public class OrderTab extends JPanel implements OrderObserver{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -26,17 +28,16 @@ public class OrderTab extends JPanel{
 	private OrderLinesTableModel orderLinesTableModel;
 	private OrderControler orderControler;
 
-
 	private JTable orderLinesTable;
-	
 	
 	public OrderTab() {
 		
-
 		orderTableModel = new OrderTableModel();
 		orderLinesTableModel = new OrderLinesTableModel();
 		
 		this.orderControler = new OrderControler(this, orderTableModel, orderLinesTableModel);
+		
+		OrderNotifier.addObserver(this);
 		
 		// Order table
 		
@@ -45,7 +46,6 @@ public class OrderTab extends JPanel{
 		JScrollPane catalogPane = new JScrollPane(orderTable);
 
 		orderTable.setFillsViewportHeight(true);
-
 		
 		// Order table listener
 		
@@ -89,5 +89,14 @@ public class OrderTab extends JPanel{
 		linesTab.setLayout(bl2);
 		linesTab.add(linesScrollPane);
 		this.add(linesTab);
+	}
+	
+	@Override
+	public void newOrderSubmitted() {
+		this.reloadOrders();
+	}
+	
+	public void reloadOrders() {
+		this.orderControler.reloadOrders();
 	}
 }
