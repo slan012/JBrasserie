@@ -1,8 +1,13 @@
 package org.cnam.jbrasserie.views.client;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
+
 import javax.swing.AbstractAction;
+import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -27,30 +32,32 @@ public class ClientCatalogTab extends JPanel{
 	
 	JSpinner quantitySpinner;
 	JLabel quantityLabel;
+	JPanel choicePanel;
 	JButton addButton;
+	JLabel message;
+	JPanel addToBasketPanel;
+	JPanel messagePanel;
 	
 	public ClientCatalogTab() {
 		this.setLayout(new BorderLayout());
-		beerTableModel = new ClientBeersTableModel();
+		this.beerTableModel = new ClientBeersTableModel();
 		this.catalogControler = new ClientCatalogControler(this, beerTableModel);
 		
 		// Beer table
 		
-		beerTable = new JTable(beerTableModel);
-		beerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		this.beerTable = new JTable(beerTableModel);
+		this.beerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane scrollPane = new JScrollPane(beerTable);
-		beerTable.setFillsViewportHeight(true);
+		this.beerTable.setFillsViewportHeight(true);
 		
-		// Add To Basket panel
+	
+		// Choice panel
 		
-		JPanel addToBasketPanel = new JPanel();
-		
-		// Text Field
-		
+		this.choicePanel = new JPanel();
 		this.quantityLabel = new JLabel("Quantité :");
 		this.quantitySpinner = new JSpinner(new SpinnerNumberModel(1,1, null, 1));
-		
-		// Button
+		this.quantitySpinner.setPreferredSize(new Dimension(60, 25));
+		this.quantitySpinner.setMaximumSize(new Dimension(60, 25));
 		
 		addButton = new JButton(new AbstractAction("Ajouter au panier") {
 			@Override
@@ -61,14 +68,40 @@ public class ClientCatalogTab extends JPanel{
 
 		addButton.setEnabled(false);
 		
-		// Layout
+
+		// Message 
 		
-		addToBasketPanel.add(quantityLabel);
-		addToBasketPanel.add(quantitySpinner);
-		addToBasketPanel.add(addButton);
+		this.message = new JLabel(" ");
+
+		// Layout
+	// Add To Basket panel
+		
+		this.addToBasketPanel = new JPanel();
+		GroupLayout gl = new GroupLayout(this.addToBasketPanel);
+		this.addToBasketPanel.setLayout(gl);
+		JPanel container = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		container.add(addToBasketPanel);
+		gl.setHorizontalGroup(
+				gl.createParallelGroup(GroupLayout.Alignment.LEADING)
+					.addGroup(gl.createSequentialGroup()
+						.addComponent(this.quantityLabel)
+						.addComponent(this.quantitySpinner)
+						.addComponent(this.addButton))
+					.addComponent(this.message));
+		
+		gl.setVerticalGroup(
+				gl.createSequentialGroup()
+					.addGroup(gl.createParallelGroup(GroupLayout.Alignment.BASELINE)
+						.addComponent(quantityLabel)
+						.addComponent(quantitySpinner)
+						.addComponent(addButton))
+					.addComponent(message));
+		
+		gl.setAutoCreateGaps(true);
+		gl.setAutoCreateContainerGaps(true);
 
 		this.add(scrollPane, BorderLayout.NORTH);
-		this.add(addToBasketPanel, BorderLayout.CENTER);
+		this.add(container, BorderLayout.CENTER);
 		
 		// Order table listener
 		
@@ -77,9 +110,9 @@ public class ClientCatalogTab extends JPanel{
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				setAddButtonState(true);
+				clearMessage();
 			}
 		});
-		
 	}
 	
 	public int getSelectedRow() {
@@ -97,6 +130,25 @@ public class ClientCatalogTab extends JPanel{
 	
 	public void setAddButtonState(boolean state) {
 		this.addButton.setEnabled(state);
+	}
+	
+	public void showError(String message) {
+		this.message.setForeground(Color.RED);
+		showMessage(message);
+	}
+	
+	public void showSuccess(String message) {
+		this.message.setForeground(Color.BLUE);
+		showMessage(message);
+	}
+	
+	private void showMessage(String message) {
+		this.clearMessage();
+		this.message.setText(message);
+	}
+	
+	public void clearMessage() {
+		this.message.setText(" ");
 	}
 }
 

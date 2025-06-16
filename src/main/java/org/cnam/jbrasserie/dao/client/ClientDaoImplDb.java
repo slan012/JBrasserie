@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.cnam.jbrasserie.beans.Client;
 import org.cnam.jbrasserie.database.DBConnection;
+import org.cnam.jbrasserie.exceptions.DaoException;
 
 public class ClientDaoImplDb implements ClientDao {
 
@@ -115,7 +116,7 @@ public class ClientDaoImplDb implements ClientDao {
 			preparedStatement.setString(3, client.getAdress());
 			preparedStatement.setInt(4, client.getZipCode());
 			preparedStatement.setString(5, client.getCity());
-			preparedStatement.setInt(6, client.getPhone());
+			preparedStatement.setString(6, client.getPhone());
 		
 			updatedRows = preparedStatement.executeUpdate();
 			connection.commit();
@@ -164,7 +165,7 @@ public class ClientDaoImplDb implements ClientDao {
 			preparedStatement.setString(3, client.getAdress());
 			preparedStatement.setInt(4, client.getZipCode());
 			preparedStatement.setString(5, client.getCity());
-			preparedStatement.setInt(6, client.getPhone());
+			preparedStatement.setString(6, client.getPhone());
 			preparedStatement.setInt(7, client.getId());
 		
 			updatedRows = preparedStatement.executeUpdate();
@@ -185,9 +186,10 @@ public class ClientDaoImplDb implements ClientDao {
 	 * Deletes a client from the database.
 	 *
 	 * @param id the ID of the client to delete.
+	 * @throws Exception 
 	 */
 	@Override
-	public void delete(int id) {
+	public void delete(int id) throws DaoException {
 		// TEST OK
 		int deletedRows = 0;
 		String query = "DELETE FROM client "
@@ -202,10 +204,8 @@ public class ClientDaoImplDb implements ClientDao {
 			if (deletedRows == 0) {
 				throw new SQLException("Deleting failed");
 			}
-		} catch (NullPointerException e ) {
-			System.out.print("Sélectionnez une ligne");
-		} catch (Exception e2) {
-			System.out.print("Impossible de supprimer un client qui a effectué au moins une commande");
+		} catch (Exception e) {
+			throw new DaoException(e.getMessage());
 		}
 
 	}
@@ -219,7 +219,7 @@ public class ClientDaoImplDb implements ClientDao {
 			client.setAdress(results.getString("adress"));
 			client.setZipCode(results.getInt("zipCode"));
 			client.setCity(results.getString("city"));
-			client.setPhone(results.getInt("phoneNumber"));
+			client.setPhone(results.getString("phoneNumber"));
 		} catch (Exception e) {
 			System.err.print("Error while building client object !");
 			e.printStackTrace();

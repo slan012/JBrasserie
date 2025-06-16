@@ -1,6 +1,7 @@
 package org.cnam.jbrasserie.views.shop;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,6 +46,8 @@ public class CatalogTab extends JPanel{
 	JButton deleteButton;
 	JButton newEntryButton;
 	
+	JLabel message;
+	
 	private List<JTextField> textFieldList;
 	
 	public CatalogTab() {
@@ -80,6 +83,7 @@ public class CatalogTab extends JPanel{
 						changeUpdateButtonName(false);
 						setUpdateButtonState(true);
 						setDeleteButtonState(true);
+						clearMessage();
 					}
 				}
 			}
@@ -127,7 +131,7 @@ public class CatalogTab extends JPanel{
 	}
 	
 	public void changeUpdateButtonName(boolean isNewBeer) {
-		String name = isNewBeer ? "Ajouter" : "Mettre à jour";
+		String name = isNewBeer ? "Enregistrer" : "Mettre à jour";
 		this.updateButton.setText(name);
 	}
 	
@@ -137,6 +141,26 @@ public class CatalogTab extends JPanel{
 	}
 	public void setDeleteButtonState(boolean state) {
 		this.deleteButton.setEnabled(state);
+	}
+	
+	// Message
+	public void showError(String message) {
+		this.message.setForeground(Color.RED);
+		showMessage(message);
+	}
+	
+	public void showSuccess(String message) {
+		this.message.setForeground(Color.BLUE);
+		showMessage(message);
+	}
+	
+	private void showMessage(String message) {
+		this.clearMessage();
+		this.message.setText(message);
+	}
+	
+	public void clearMessage() {
+		this.message.setText(" ");
 	}
 
 	public void buildEditPanel() {
@@ -150,7 +174,7 @@ public class CatalogTab extends JPanel{
 		JLabel alcoholLabel = new JLabel("Alcool :");
 		JLabel priceLabel =   new JLabel("Prix :");
 		JLabel stockLabel =   new JLabel("Stock :");
-		
+		this.message =        new JLabel(" ");
 		// Fields		
 		
 		this.idField =      new JTextField();
@@ -186,7 +210,7 @@ public class CatalogTab extends JPanel{
 			}
 		});
 		
-		newEntryButton = new JButton(new AbstractAction("Nouvelle entrée") {
+		newEntryButton = new JButton(new AbstractAction("Nouvel article") {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				catalogControler.newEntry();			
@@ -199,8 +223,7 @@ public class CatalogTab extends JPanel{
 
 		GroupLayout gl = new GroupLayout(editPanel);
 		gl.setHorizontalGroup(
-			gl.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl.createSequentialGroup()
+				gl.createSequentialGroup()
 					.addGroup(gl.createParallelGroup(Alignment.LEADING)
 						.addComponent(nameLabel)
 						.addComponent(brewerLabel)
@@ -213,17 +236,16 @@ public class CatalogTab extends JPanel{
 							.addComponent(styleField)
 							.addComponent(brewerField)
 							.addComponent(nameField)
-							.addGroup(gl.createParallelGroup(Alignment.TRAILING)
-								.addComponent(priceField, Alignment.LEADING)
-								.addComponent(alcoholField, Alignment.LEADING)
-								.addComponent(stockField, Alignment.LEADING)))
+							.addComponent(priceField, Alignment.LEADING)
+							.addComponent(alcoholField, Alignment.LEADING)
+							.addComponent(stockField, Alignment.LEADING))
 						.addGroup(gl.createSequentialGroup()
 							.addComponent(newEntryButton)
 							.addComponent(updateButton)
-							.addComponent(deleteButton)))));
+							.addComponent(deleteButton))
+						.addComponent(message)));
 		gl.setVerticalGroup(
-			gl.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl.createSequentialGroup()
+			gl.createSequentialGroup()
 					.addGroup(gl.createParallelGroup(Alignment.BASELINE)
 						.addComponent(nameLabel)
 						.addComponent(nameField))
@@ -246,7 +268,9 @@ public class CatalogTab extends JPanel{
 					.addGroup(gl.createParallelGroup(Alignment.BASELINE)
 						.addComponent(newEntryButton)
 						.addComponent(updateButton)
-						.addComponent(deleteButton))));
+						.addComponent(deleteButton))
+					.addGroup(gl.createParallelGroup(Alignment.BASELINE)
+						.addComponent(message)));
 		
 		editPanel.setLayout(gl);
 		gl.setAutoCreateGaps(true);

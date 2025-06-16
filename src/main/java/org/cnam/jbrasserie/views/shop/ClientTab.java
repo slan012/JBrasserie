@@ -1,6 +1,7 @@
 package org.cnam.jbrasserie.views.shop;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,6 +47,8 @@ public class ClientTab extends JPanel{
 	JButton deleteButton;
 	JButton newButton;
 	
+	JLabel message;
+	
 	private List<JTextField> textFieldList;
 	
 	public ClientTab() {
@@ -86,6 +89,7 @@ public class ClientTab extends JPanel{
 						setUpdateButtonState(true);
 						setDeleteButtonState(true);
 						changeUpdateButtonName(false);
+						clearMessage();
 					}
 				}
 			}
@@ -145,6 +149,7 @@ public class ClientTab extends JPanel{
 		JLabel zipCodeLabel = new JLabel("Code postal :");
 		JLabel cityLabel =  new JLabel("Ville :");
 		JLabel phoneLabel =  new JLabel("Numéro de téléphone :");
+		this.message = new JLabel(" ");
 		
 		// Fields		
 		
@@ -210,39 +215,40 @@ public class ClientTab extends JPanel{
 							.addComponent(adressField)
 							.addComponent(lastNameField)
 							.addComponent(firstNameField)
-							.addGroup(gl.createParallelGroup(Alignment.TRAILING)
-								.addComponent(cityField, Alignment.LEADING)
-								.addComponent(zipCodeField, Alignment.LEADING)
-								.addComponent(phoneField, Alignment.LEADING)))
+							.addComponent(cityField, Alignment.LEADING)
+							.addComponent(zipCodeField, Alignment.LEADING)
+							.addComponent(phoneField, Alignment.LEADING))
 						.addGroup(gl.createSequentialGroup()
-							.addComponent(updateButton)
-							.addComponent(deleteButton)
-							.addComponent(newButton)))));
+								.addComponent(newButton)
+								.addComponent(updateButton)
+								.addComponent(deleteButton))
+						.addComponent(message))));
 		gl.setVerticalGroup(
-			gl.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl.createSequentialGroup()
-					.addGroup(gl.createParallelGroup(Alignment.BASELINE)
-						.addComponent(firstNameLabel)
-						.addComponent(firstNameField))
-					.addGroup(gl.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lastNameLabel)
-						.addComponent(lastNameField))
-					.addGroup(gl.createParallelGroup(Alignment.BASELINE)
-						.addComponent(adressLabel)
-						.addComponent(adressField))
-					.addGroup(gl.createParallelGroup(Alignment.BASELINE)
-						.addComponent(zipCodeLabel)
-						.addComponent(zipCodeField))
-					.addGroup(gl.createParallelGroup(Alignment.BASELINE)
-						.addComponent(cityLabel)
-						.addComponent(cityField))
-					.addGroup(gl.createParallelGroup(Alignment.BASELINE)
-						.addComponent(phoneLabel)
-						.addComponent(phoneField))
-					.addGroup(gl.createParallelGroup(Alignment.BASELINE)
-						.addComponent(updateButton)
-						.addComponent(deleteButton)
-						.addComponent(newButton))));
+			gl.createSequentialGroup()
+				.addGroup(gl.createParallelGroup(Alignment.BASELINE)
+					.addComponent(firstNameLabel)
+					.addComponent(firstNameField))
+				.addGroup(gl.createParallelGroup(Alignment.BASELINE)
+					.addComponent(lastNameLabel)
+					.addComponent(lastNameField))
+				.addGroup(gl.createParallelGroup(Alignment.BASELINE)
+					.addComponent(adressLabel)
+					.addComponent(adressField))
+				.addGroup(gl.createParallelGroup(Alignment.BASELINE)
+					.addComponent(zipCodeLabel)
+					.addComponent(zipCodeField))
+				.addGroup(gl.createParallelGroup(Alignment.BASELINE)
+					.addComponent(cityLabel)
+					.addComponent(cityField))
+				.addGroup(gl.createParallelGroup(Alignment.BASELINE)
+					.addComponent(phoneLabel)
+					.addComponent(phoneField))
+				.addGroup(gl.createParallelGroup(Alignment.BASELINE)
+					.addComponent(newButton)
+					.addComponent(deleteButton)
+					.addComponent(updateButton))
+				.addGroup(gl.createParallelGroup(Alignment.BASELINE)
+					.addComponent(message)));
 		
 		editPanel.setLayout(gl);
 		gl.setAutoCreateGaps(true);
@@ -259,7 +265,27 @@ public class ClientTab extends JPanel{
 	}
 	
 	public void changeUpdateButtonName(boolean isNewBeer) {
-		String name = isNewBeer ? "Ajouter" : "Mettre à jour";
+		String name = isNewBeer ? "Enregistrer" : "Mettre à jour";
 		this.updateButton.setText(name);
+	}
+	
+	// Message
+	public void showError(String message) {
+		this.message.setForeground(Color.RED);
+		showMessage(message);
+	}
+	
+	public void showSuccess(String message) {
+		this.message.setForeground(Color.BLUE);
+		showMessage(message);
+	}
+	
+	private void showMessage(String message) {
+		this.clearMessage();
+		this.message.setText(message);
+	}
+	
+	public void clearMessage() {
+		this.message.setText(" ");
 	}
 }
