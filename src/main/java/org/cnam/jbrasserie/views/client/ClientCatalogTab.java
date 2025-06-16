@@ -20,10 +20,12 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.cnam.jbrasserie.controlers.client.ClientCatalogControler;
+import org.cnam.jbrasserie.observers.CatalogNotifier;
+import org.cnam.jbrasserie.observers.CatalogObserver;
 import org.cnam.jbrasserie.tablesModels.ClientBeersTableModel;
 
 @SuppressWarnings("serial")
-public class ClientCatalogTab extends JPanel{
+public class ClientCatalogTab extends JPanel implements CatalogObserver{
 	
 	private static final long serialVersionUID = 1L;
 	private JTable beerTable;
@@ -42,7 +44,7 @@ public class ClientCatalogTab extends JPanel{
 		this.setLayout(new BorderLayout());
 		this.beerTableModel = new ClientBeersTableModel();
 		this.catalogControler = new ClientCatalogControler(this, beerTableModel);
-		
+		CatalogNotifier.addObserver(this);
 		// Beer table
 		
 		this.beerTable = new JTable(beerTableModel);
@@ -149,6 +151,11 @@ public class ClientCatalogTab extends JPanel{
 	
 	public void clearMessage() {
 		this.message.setText(" ");
+	}
+
+	@Override
+	public void catalogUpdated() {
+		this.catalogControler.updateTable();
 	}
 }
 

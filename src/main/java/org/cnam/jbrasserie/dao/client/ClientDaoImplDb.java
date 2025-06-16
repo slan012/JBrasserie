@@ -85,11 +85,7 @@ public class ClientDaoImplDb implements ClientDao {
 			}
 			results.close();
 		} catch (SQLException e) {
-			System.err.print("SQL request error : ");
 			e.printStackTrace();
-		}
-		if (clientList.size() == 0) {
-			System.out.print("Client not found!");
 		}
 		return clientList;
 	}
@@ -120,7 +116,7 @@ public class ClientDaoImplDb implements ClientDao {
 		
 			updatedRows = preparedStatement.executeUpdate();
 			connection.commit();
-			System.out.print("commit OK");
+
 			if (updatedRows == 0) {
 				throw new SQLException("Inserting client failed, no row added");
 			}
@@ -169,10 +165,8 @@ public class ClientDaoImplDb implements ClientDao {
 			preparedStatement.setInt(7, client.getId());
 		
 			updatedRows = preparedStatement.executeUpdate();
-			
 			connection.commit();
-			System.out.print("commit OK");
-			
+		
 			if (updatedRows == 0) {
 				throw new SQLException("Updating failed, id " + client.getId() + " not found");
 			}

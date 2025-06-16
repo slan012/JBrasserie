@@ -147,9 +147,7 @@ public class OrderDaoImplDb implements OrderDao{
 			}
 			
 			preparedStatementLine.executeBatch();
-			
 			connection.commit();
-			System.out.print("commit OK");
 		
 		}catch (Exception e) {
 			try {

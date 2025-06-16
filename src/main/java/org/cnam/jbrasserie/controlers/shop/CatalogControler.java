@@ -8,6 +8,7 @@ import org.cnam.jbrasserie.dao.beer.BeerDao;
 import org.cnam.jbrasserie.dao.beer.BeerDaoImplDb;
 import org.cnam.jbrasserie.exceptions.DaoException;
 import org.cnam.jbrasserie.exceptions.FormException;
+import org.cnam.jbrasserie.observers.CatalogNotifier;
 import org.cnam.jbrasserie.tablesModels.BeersTableModel;
 import org.cnam.jbrasserie.views.shop.CatalogTab;
 
@@ -49,6 +50,7 @@ public class CatalogControler{
 			this.catalogView.setUpdateButtonState(false);
 //			this.catalogView.clearMessage();
 			updateTable();
+			CatalogNotifier.catalogUpdated();
 		} catch (FormException e){
 			this.catalogView.showError(e.getMessage());
 		} 
@@ -72,9 +74,10 @@ public class CatalogControler{
 			if (catalogView.getSelectedRow() >= 0) {
 				this.editedBeer = handleEditedBeer();
 				this.beerDao.delete(editedBeer.getId());
-				this.catalogView.clearEditPanel();
+				this.catalogView.clearEditPanel();			
 				this.catalogView.showSuccess("Article supprimé");
 			} 
+			CatalogNotifier.catalogUpdated();
 			this.updateTable();
 			this.catalogView.setUpdateButtonState(false);
 			this.catalogView.setDeleteButtonState(false);

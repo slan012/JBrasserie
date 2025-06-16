@@ -17,7 +17,7 @@ public class ShopView extends JFrame {
 		frame = new JFrame();
 		frame.setTitle("JBrasserie Shop");
 		frame.setSize(800, 600);
-		frame.setLocation(900, 400);
+		frame.setLocation(850, 400);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		
 		// JTabbedPane

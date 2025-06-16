@@ -38,7 +38,6 @@ public class OrderControler {
 	}
 	
 	public void reloadOrders(){
-		System.out.println("Reload OK");
 		orders = orderDao.findAll();
 		this.orderTableModel.update(orders);
 	}
