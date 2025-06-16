@@ -15,11 +15,11 @@ import org.cnam.jbrasserie.database.DBConnection;
 public class OrderLineDaoImplDb implements OrderLineDao {
 
 	@Override
-	public List<OrderLine> findOrderLineById(Integer idOrder) {
+	public List<OrderLine> findOrderLineById(Integer idOrder){
 		String query = 
-				"SELECT idOrder, b.*, quantity \r\n"
-				+ "FROM orderline ol\r\n"
-				+ "join beer b on b.idBeer = ol.idBeer\r\n"
+				"SELECT idOrder, b.*, quantity "
+				+ "FROM orderline ol "
+				+ "join beer b on b.idBeer = ol.idBeer "
 				+ "WHERE idOrder = ?";
 		
 		List<OrderLine> orderLineList = new ArrayList<>();
@@ -41,10 +41,13 @@ public class OrderLineDaoImplDb implements OrderLineDao {
 				beer.setAlcohol(results.getFloat("alcohol"));
 				beer.setPrice(results.getFloat("price"));
 				beer.setStock(results.getInt("stock"));
-				
 				orderLine.setIdOrder(results.getInt("idOrder"));
 				orderLine.setBeer(beer);
-				orderLine.setQuantity(results.getInt("quantity"));
+				try {
+					orderLine.setQuantity(results.getInt("quantity"));
+				} catch (Exception ignore) {
+					// Ignore exception
+				}
 				orderLineList.add(orderLine);
 			}
 			results.close();

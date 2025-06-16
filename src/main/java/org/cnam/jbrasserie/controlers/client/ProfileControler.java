@@ -6,6 +6,7 @@ import org.cnam.jbrasserie.beans.Client;
 import org.cnam.jbrasserie.beans.Order;
 import org.cnam.jbrasserie.dao.client.ClientDao;
 import org.cnam.jbrasserie.dao.client.ClientDaoImplDb;
+import org.cnam.jbrasserie.exceptions.FormException;
 import org.cnam.jbrasserie.session.Session;
 import org.cnam.jbrasserie.views.client.ClientView;
 import org.cnam.jbrasserie.views.client.ProfileTab;
@@ -24,20 +25,24 @@ public class ProfileControler {
 	}
 	
 	public void updateUser() {
-		editedClient = handleEditedClient();
-		clientDao.update(editedClient);
+		try {
+			this.profileView.clearMessage();
+			editedClient = handleEditedClient();
+			clientDao.update(editedClient);
+			profileView.showSuccess("Informations mises à jour");
+		} catch (FormException e) {
+			this.profileView.showError(e.getMessage());
+		}
 	}
 	
 	public void connectUser() {
 		try {
 			int id = Integer.parseInt(profileView.getConnexionId());
-			System.out.println(id);
 			Client client = clientDao.findById(id);
+			System.out.println(client.getId());
 			if (client.getId() != null) {
-				System.out.println(client.getLastName());
-				
+				this.profileView.clearMessage();
 				if (Session.getCurrentUser() == null || !Session.getCurrentUser().getId().equals(client.getId())) {
-					System.out.println("Connexion avec l'identifiant : " + id);
 					Session.setCurrentUser(client);
 					Session.setCurrentOrder(new Order());
 				}
@@ -45,29 +50,36 @@ public class ProfileControler {
 				clientView.newTabs();
 				this.profileView.update(client);
 				this.profileView.setEditPanelEditable(true);
-				System.out.print(Session.getCurrentOrder());
-				
+				this.profileView.showSuccess("Bienvenue " + Session.getCurrentUser().getFirstName() + " !");
 			} else {
-					this.resetViews();
-					System.out.print("Ce compte n'existe pas");
+				this.resetViews();
+				this.profileView.showError("Cet utilisateur n'existe pas");
 			}
-				
-		} catch (NumberFormatException e2) {
+		} catch (NumberFormatException e) {
 			this.resetViews();
-			System.out.println("Identifiant invalide");
+			this.profileView.showError("L'identifiant doit être un nombre");
 		}
 	}
 	
-	public Client handleEditedClient() {
+	public Client handleEditedClient() throws FormException {
 		Map<String, String> editedClientRaw = profileView.getEditedClientData();
+		for (Map.Entry<String, String> field : editedClientRaw.entrySet()) {
+			if (!field.getKey().equals("id") && field.getValue().isBlank()) {
+					throw new FormException("Tous les champs doivent être remplis");
+				}
+		}
 		editedClient = new Client();
 		editedClient.setId(Integer.parseInt(editedClientRaw.get("id")));
 		editedClient.setFirstName(editedClientRaw.get("firstName"));
 		editedClient.setLastName(editedClientRaw.get("lastName"));
 		editedClient.setAdress(editedClientRaw.get("adress"));
-		editedClient.setZipCode(Integer.parseInt(editedClientRaw.get("zipCode")));
+		try {
+			editedClient.setZipCode(Integer.parseInt(editedClientRaw.get("zipCode")));
+		} catch (NumberFormatException e) {
+			throw new FormException("Le code postal doit être un nombre");
+		}
 		editedClient.setCity(editedClientRaw.get("city"));
-		editedClient.setPhone(Integer.parseInt(editedClientRaw.get("phone")));
+		editedClient.setPhone(editedClientRaw.get("phone"));
 		return editedClient;
 	}
 	
@@ -76,6 +88,4 @@ public class ProfileControler {
 		this.profileView.setEditPanelEditable(false);
 		this.clientView.removeTabs();
 	}
-
-	
 }

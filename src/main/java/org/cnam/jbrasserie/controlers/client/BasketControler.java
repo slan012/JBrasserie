@@ -28,14 +28,14 @@ public class BasketControler implements PropertyChangeListener {
 	
 	public void confirmCommand() {
 		if (!Session.getCurrentOrder().getLines().isEmpty()) {
-			System.out.println("Valider");
 			Session.getCurrentOrder().setClient(Session.getCurrentUser());
 			orderDao.insertOrder(Session.getCurrentOrder());
 			OrderNotifier.newOrderSubmitted();
+			this.view.showSuccess("Commande validée !");
 			basketTableModel.init();
 			Session.getCurrentOrder().setLines(new ArrayList<>());
 		} else {
-			System.out.println("Panier vide !");
+			this.view.showError("Panier vide!");
 		}
 	}
 	
@@ -56,8 +56,8 @@ public class BasketControler implements PropertyChangeListener {
 		basketTableModel.update((List<OrderLine>) evt.getNewValue());
 		if (!Session.getCurrentOrder().getLines().isEmpty()) {
 			buttonsEnabled = true;
+			this.view.clearMessage();
 		}
 		this.view.setButtonsState(buttonsEnabled);
 	}
-
 }

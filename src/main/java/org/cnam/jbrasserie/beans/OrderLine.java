@@ -1,5 +1,7 @@
 package org.cnam.jbrasserie.beans;
 
+import org.cnam.jbrasserie.exceptions.BeanException;
+
 public class OrderLine {
 	private Integer idOrder;
 	private Beer beer;
@@ -24,11 +26,11 @@ public class OrderLine {
 		return quantity;
 	}
 	
-	public void setQuantity(Integer quantity) {
+	public void setQuantity(Integer quantity) throws BeanException {
 		if (this.beer.getStock() >= quantity) {
 			this.quantity = quantity;
 		} else {
-			throw new Error("Stock insuffisant !");
+			throw new BeanException("Stock insuffisant !");
 		}
 	}
 }

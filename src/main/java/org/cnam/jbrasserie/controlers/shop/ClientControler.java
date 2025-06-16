@@ -6,6 +6,8 @@ import java.util.Map;
 import org.cnam.jbrasserie.beans.Client;
 import org.cnam.jbrasserie.dao.client.ClientDao;
 import org.cnam.jbrasserie.dao.client.ClientDaoImplDb;
+import org.cnam.jbrasserie.exceptions.DaoException;
+import org.cnam.jbrasserie.exceptions.FormException;
 import org.cnam.jbrasserie.tablesModels.ClientTableModel;
 import org.cnam.jbrasserie.views.shop.ClientTab;
 
@@ -28,27 +30,29 @@ public class ClientControler {
 
 	// Record / Update client button
 	public void updateClient() {
+		this.clientView.clearMessage();
 		try {
 			editedClient = handleEditedClient();
 			if (!isNewClient) {
 				this.clientDao.update(editedClient);
+				this.clientView.showSuccess("Informations mises à jour");
 			} else {
 				this.clientDao.add(editedClient);
+				this.clientView.showSuccess("Nouveau client enregistré");
 			}
+			editedClient = null;
+			isNewClient = false;
+			updateTable();
 			this.clientView.clearEditPanel();
 			this.clientView.setTextFieldsEditable(false);
 			this.clientView.setUpdateButtonState(false);
 			this.clientView.setDeleteButtonState(false);
 			this.clientView.changeUpdateButtonName(true);
-		} catch (NullPointerException e1) {
-			System.out.println("Veuillez remplir tous les champs");
-		} catch (Exception e2) {
-			System.out.println("Veuillez remplir tous les champs");
+			
+		} catch (FormException e) {
+			this.clientView.showError(e.getMessage());
+		
 		}
-
-		editedClient = null;
-		isNewClient = false;
-		updateTable();
 	}
 
 	// New client button
@@ -63,18 +67,21 @@ public class ClientControler {
 	
 	// Delete button
 	public void deleteClient() {
-		if (clientView.getSelectedRow() >= 0) {
-			editedClient = handleEditedClient();
-			clientDao.delete(editedClient.getId());
-			this.clientView.clearEditPanel();
-		} else {
-			System.out.println("Sélectionnez une ligne");
+		isNewClient = false;
+		try {
+			if (clientView.getSelectedRow() >= 0) {
+				editedClient = handleEditedClient();
+				clientDao.delete(editedClient.getId());
+				this.clientView.clearEditPanel();
+			} 
+			this.clientView.setTextFieldsEditable(false);
+			this.clientView.setUpdateButtonState(false);
+			this.clientView.setDeleteButtonState(false);
+			this.clientView.changeUpdateButtonName(true);
+			updateTable();
+		} catch (DaoException | FormException e) {
+			this.clientView.showError("Impossible de supprimer un utilisateur qui a effectué une commande");
 		}
-		this.clientView.setTextFieldsEditable(false);
-		this.clientView.setUpdateButtonState(false);
-		this.clientView.setDeleteButtonState(false);
-		this.clientView.changeUpdateButtonName(true);
-		updateTable();
 	}
 	
 	public void updateTable() {
@@ -88,8 +95,13 @@ public class ClientControler {
 		return selectedClient;
 	}
 
-	public Client handleEditedClient() {
+	public Client handleEditedClient() throws FormException {
 		Map<String, String> editedClientRaw = clientView.getEditedClientData();
+		for (Map.Entry<String, String> field : editedClientRaw.entrySet()) {
+			if (!field.getKey().equals("id") && field.getValue().isBlank()) {
+					throw new FormException("Tous les champs doivent être remplis");
+				}
+		}
 		editedClient = new Client();
 		if (!isNewClient) {
 			editedClient.setId(Integer.parseInt(editedClientRaw.get("id")));
@@ -97,9 +109,13 @@ public class ClientControler {
 		editedClient.setFirstName(editedClientRaw.get("firstName"));
 		editedClient.setLastName(editedClientRaw.get("lastName"));
 		editedClient.setAdress(editedClientRaw.get("adress"));
-		editedClient.setZipCode(Integer.parseInt(editedClientRaw.get("zipCode")));
+		try {
+			editedClient.setZipCode(Integer.parseInt(editedClientRaw.get("zipCode")));
+		} catch (NumberFormatException e) {
+			throw new FormException("Le code postal doit être un nombre");
+		}
 		editedClient.setCity(editedClientRaw.get("city"));
-		editedClient.setPhone(Integer.parseInt(editedClientRaw.get("phone")));
+		editedClient.setPhone(editedClientRaw.get("phone"));
 		return editedClient;
 	}
 }

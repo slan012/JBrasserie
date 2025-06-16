@@ -1,7 +1,5 @@
 package org.cnam.jbrasserie.controlers.shop;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 
 import org.cnam.jbrasserie.beans.Order;
@@ -14,7 +12,7 @@ import org.cnam.jbrasserie.tablesModels.OrderLinesTableModel;
 import org.cnam.jbrasserie.tablesModels.OrderTableModel;
 import org.cnam.jbrasserie.views.shop.OrderTab;
 
-public class OrderControler implements ActionListener{
+public class OrderControler {
 
 	OrderTab orderView;
 	OrderDao orderDao = new OrderDaoImplDb();
@@ -32,11 +30,6 @@ public class OrderControler implements ActionListener{
 
 		this.orderLinesTableModel = orderLineTableModel;
 		this.orderLinesTableModel.init();
-	}
-	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		//
 	}
 	
 	public List<OrderLine> getOrderLines(int idOrder) {

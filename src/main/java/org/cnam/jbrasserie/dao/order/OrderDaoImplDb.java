@@ -173,7 +173,7 @@ public class OrderDaoImplDb implements OrderDao{
 			client.setAdress(results.getString("adress"));
 			client.setZipCode(results.getInt("zipCode"));
 			client.setCity(results.getString("city"));
-			client.setPhone(results.getInt("phoneNumber"));
+			client.setPhone(results.getString("phoneNumber"));
 			
 			order.setClient(client);
 			order.setIdOrder(results.getInt("idOrder"));

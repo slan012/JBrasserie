@@ -10,9 +10,9 @@ import java.util.List;
 
 import org.cnam.jbrasserie.beans.Beer;
 import org.cnam.jbrasserie.database.DBConnection;
+import org.cnam.jbrasserie.exceptions.DaoException;
 
 public class BeerDaoImplDb implements BeerDao{
-	
 	
 	/**
 	 * Retrieves all beers from the database.
@@ -201,7 +201,7 @@ public class BeerDaoImplDb implements BeerDao{
 	 * @param id the ID of the beer to delete.
 	 */
 	@Override
-	public void delete(int id) {
+	public void delete(int id) throws DaoException{
 		int deletedRows = 0;
 		String query = "DELETE FROM beer "
 					 + "WHERE idBeer=? ;";
@@ -216,7 +216,7 @@ public class BeerDaoImplDb implements BeerDao{
 				throw new SQLException("Deleting failed");
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new DaoException(e.getMessage());
 		}
 	}
 

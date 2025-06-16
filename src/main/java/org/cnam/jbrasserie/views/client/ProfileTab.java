@@ -1,6 +1,7 @@
 package org.cnam.jbrasserie.views.client;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +23,8 @@ import org.cnam.jbrasserie.controlers.client.ProfileControler;
 public class ProfileTab extends JPanel{
 	
 	private static final long serialVersionUID = 1L;
+	
+	private JTextField loginField;
 	private JTextField idField;
 	private JTextField firstNameField;
 	private JTextField lastNameField;
@@ -33,9 +36,9 @@ public class ProfileTab extends JPanel{
 	private JButton modifyButton;
 	private JButton connectButton;
 	
-	private List<JTextField> fieldList;
+	private JLabel message;
 	
-	private JTextField loginField;
+	private List<JTextField> fieldList;
 	
 	JPanel loginPanel;
 	
@@ -106,6 +109,10 @@ public class ProfileTab extends JPanel{
 		this.fieldList.add(cityField);
 		this.fieldList.add(phoneField);
 		
+		// Message
+		
+		message = new JLabel(" ");
+		
 		setEditPanelEditable(false);
 		
 		gl.setHorizontalGroup(
@@ -123,12 +130,12 @@ public class ProfileTab extends JPanel{
 							.addComponent(adressField)
 							.addComponent(lastNameField)
 							.addComponent(firstNameField)
-							.addGroup(gl.createParallelGroup(Alignment.TRAILING)
-								.addComponent(cityField, Alignment.LEADING)
-								.addComponent(zipCodeField, Alignment.LEADING)
-								.addComponent(phoneField, Alignment.LEADING)))
+						.addComponent(cityField, Alignment.LEADING)
+							.addComponent(zipCodeField, Alignment.LEADING)
+							.addComponent(phoneField, Alignment.LEADING))
 						.addGroup(gl.createSequentialGroup()
-							.addComponent(modifyButton)))));
+							.addComponent(modifyButton))
+						.addComponent(message))));
 		gl.setVerticalGroup(
 			gl.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl.createSequentialGroup()
@@ -151,7 +158,8 @@ public class ProfileTab extends JPanel{
 						.addComponent(phoneLabel)
 						.addComponent(phoneField))
 					.addGroup(gl.createParallelGroup(Alignment.BASELINE)
-						.addComponent(modifyButton))));
+						.addComponent(modifyButton))
+					.addComponent(message)));
 		
 		
 		gl.setAutoCreateGaps(true);
@@ -188,6 +196,25 @@ public class ProfileTab extends JPanel{
 		for (JTextField field : this.fieldList) {
 			field.setText("");
 		}
+	}
+	
+	public void showError(String message) {
+		this.message.setForeground(Color.RED);
+		showMessage(message);
+	}
+	
+	public void showSuccess(String message) {
+		this.message.setForeground(Color.BLUE);
+		showMessage(message);
+	}
+	
+	private void showMessage(String message) {
+		this.clearMessage();
+		this.message.setText(message);
+	}
+	
+	public void clearMessage() {
+		this.message.setText(" ");
 	}
 
 	public void update(Client client) {
