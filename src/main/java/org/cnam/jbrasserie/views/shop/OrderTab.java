@@ -57,7 +57,6 @@ public class OrderTab extends JPanel implements OrderObserver{
 					int selectedRow = orderTable.getSelectedRow();
 					if (selectedRow >= 0 && selectedRow < orderTableModel.getRowCount()) {
 						int modelRow = orderTable.convertRowIndexToModel(selectedRow);
-						System.out.print(orderTableModel.getValueAt(modelRow, 0));
 						List <OrderLine> orderLines = orderControler.getOrderLines((int) orderTableModel.getValueAt(modelRow, 0));
 						orderLinesTableModel.update(orderLines);
 					}
@@ -93,10 +92,6 @@ public class OrderTab extends JPanel implements OrderObserver{
 	
 	@Override
 	public void newOrderSubmitted() {
-		this.reloadOrders();
-	}
-	
-	public void reloadOrders() {
 		this.orderControler.reloadOrders();
 	}
 }

@@ -70,7 +70,7 @@ public class BasketTab extends JPanel {
 		GroupLayout gl = new GroupLayout(this.buttonsPanel);
 		this.buttonsPanel.setLayout(gl);
 		
-		message = new JLabel("qsdqsd");
+		message = new JLabel(" ");
 		
 		JPanel container = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		container.add(buttonsPanel);

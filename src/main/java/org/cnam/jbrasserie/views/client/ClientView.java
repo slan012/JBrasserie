@@ -19,7 +19,7 @@ public class ClientView{
 		frame = new JFrame();
 		frame.setTitle("JBrasserie Client");
 		frame.setSize(800, 600);
-		frame.setLocation(300,100);
+		frame.setLocation(50,50);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		
 		// JTabbedPane

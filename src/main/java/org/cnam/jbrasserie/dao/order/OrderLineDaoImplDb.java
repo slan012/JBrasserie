@@ -76,7 +76,6 @@ public class OrderLineDaoImplDb implements OrderLineDao {
 		
 			updatedRows = preparedStatement.executeUpdate();
 			connection.commit();
-			System.out.print("commit OK");
 			if (updatedRows == 0) {
 				throw new SQLException("Inserting orderLine failed, no row added");
 			}

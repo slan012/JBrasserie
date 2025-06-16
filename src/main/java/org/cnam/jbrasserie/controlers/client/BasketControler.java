@@ -23,7 +23,6 @@ public class BasketControler implements PropertyChangeListener {
 		this.view = view;
 		this.basketTableModel = tableModel;
 		Session.getCurrentOrder().addPropertyChangeListener(this);
-		System.out.println(Session.getCurrentOrder());
 	}
 	
 	public void confirmCommand() {

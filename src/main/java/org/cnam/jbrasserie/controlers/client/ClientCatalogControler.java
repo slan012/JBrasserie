@@ -22,8 +22,7 @@ public class ClientCatalogControler {
 		this.view = clientCatalogTab;
 		this.beerTableModel = beerTableModel;
 		this.beerDao = new BeerDaoImplDb();
-		this.beers = beerDao.findAll();
-		this.beerTableModel.update(beers);
+		this.updateTable();
 	}
 	
 	public void addLineToBasket() {
@@ -55,8 +54,6 @@ public class ClientCatalogControler {
 				}
 				
 			}
-			System.out.println("BeerId :" + beerId);
-			
 		}
 	}
 	
@@ -76,5 +73,10 @@ public class ClientCatalogControler {
 			}
 		}
 		return -1;
+	}
+	
+	public void updateTable() {
+		this.beers = beerDao.findAll();
+		this.beerTableModel.update(beers);
 	}
 }

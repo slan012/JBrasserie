@@ -98,11 +98,7 @@ public class BeerDaoImplDb implements BeerDao{
 			}
 			results.close();
 		} catch (SQLException e) {
-			System.err.print("SQL request error : ");
 			e.printStackTrace();
-		}
-		if (beerList.size() == 0) {
-			System.out.print("Beer not found!");
 		}
 		return beerList;
 	}
@@ -133,7 +129,6 @@ public class BeerDaoImplDb implements BeerDao{
 		
 			updatedRows = preparedStatement.executeUpdate();
 			connection.commit();
-			System.out.print("commit OK");
 			if (updatedRows == 0) {
 				throw new SQLException("Inserting beer failed, no row added");
 			}
@@ -185,7 +180,6 @@ public class BeerDaoImplDb implements BeerDao{
 			updatedRows = preparedStatement.executeUpdate();
 			
 			connection.commit();
-			System.out.print("commit OK");
 			
 			if (updatedRows == 0) {
 				throw new SQLException("Updating failed, id " + beer.getId() + " not found");

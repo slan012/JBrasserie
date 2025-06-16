@@ -20,11 +20,14 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
 import org.cnam.jbrasserie.beans.Client;
 import org.cnam.jbrasserie.controlers.shop.ClientControler;
+import org.cnam.jbrasserie.observers.ClientNotifier;
+import org.cnam.jbrasserie.observers.ClientObserver;
 import org.cnam.jbrasserie.tablesModels.ClientTableModel;
 
-public class ClientTab extends JPanel{
+public class ClientTab extends JPanel implements ClientObserver{
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -55,6 +58,8 @@ public class ClientTab extends JPanel{
 		
 		clientTableModel = new ClientTableModel();
 		this.clientControler = new ClientControler(this, clientTableModel);
+		ClientNotifier.addObserver(this);
+		
 		this.setLayout(new BorderLayout());
 		
 		// Table
@@ -287,5 +292,10 @@ public class ClientTab extends JPanel{
 	
 	public void clearMessage() {
 		this.message.setText(" ");
+	}
+
+	@Override
+	public void clientUpdated() {
+		this.clientControler.updateTable();
 	}
 }

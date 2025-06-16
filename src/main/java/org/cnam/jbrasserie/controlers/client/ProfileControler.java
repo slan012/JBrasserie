@@ -7,6 +7,7 @@ import org.cnam.jbrasserie.beans.Order;
 import org.cnam.jbrasserie.dao.client.ClientDao;
 import org.cnam.jbrasserie.dao.client.ClientDaoImplDb;
 import org.cnam.jbrasserie.exceptions.FormException;
+import org.cnam.jbrasserie.observers.ClientNotifier;
 import org.cnam.jbrasserie.session.Session;
 import org.cnam.jbrasserie.views.client.ClientView;
 import org.cnam.jbrasserie.views.client.ProfileTab;
@@ -29,6 +30,7 @@ public class ProfileControler {
 			this.profileView.clearMessage();
 			editedClient = handleEditedClient();
 			clientDao.update(editedClient);
+			ClientNotifier.clientUpdated();
 			profileView.showSuccess("Informations mises à jour");
 		} catch (FormException e) {
 			this.profileView.showError(e.getMessage());
@@ -39,7 +41,6 @@ public class ProfileControler {
 		try {
 			int id = Integer.parseInt(profileView.getConnexionId());
 			Client client = clientDao.findById(id);
-			System.out.println(client.getId());
 			if (client.getId() != null) {
 				this.profileView.clearMessage();
 				if (Session.getCurrentUser() == null || !Session.getCurrentUser().getId().equals(client.getId())) {
