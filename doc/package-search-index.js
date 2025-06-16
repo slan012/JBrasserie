@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"org.cnam.jbrasserie.beans"},{"l":"org.cnam.jbrasserie.dao"},{"l":"org.cnam.jbrasserie.database"}];updateSearchResults();
