@@ -27,32 +27,26 @@ public class ClientCatalogControler {
 	
 	public void addLineToBasket() {
 		int selectedRow = view.getSelectedRow();
+		OrderLine line = null;
 		if (selectedRow != -1) {
 			this.view.clearMessage();
 			int quantity = view.getQuantity();
 			Order order = Session.getCurrentOrder();
-			int beerId = (int) beerTableModel.getValueAt(selectedRow, 0);
 			Beer beer = beerDao.findById((int) beerTableModel.getValueAt(selectedRow, 0));
 			// If beer present in order, add quantity
-			if (isBeerPresent(order, beer)) {
-				OrderLine line = order.getLines().get(beerIndex(order, beer));
-				try {
+			try {
+				if (isBeerPresent(order, beer)) {
+					line = order.getLines().get(beerIndex(order, beer));
 					line.setQuantity(line.getQuantity() + quantity);
-					this.view.showSuccess("Article ajouté au panier");
-				} catch (BeanException e) {
-					this.view.showError(e.getMessage());
+				} else {
+					line = new OrderLine();
+						line.setBeer(beer);
+						line.setQuantity(quantity);
+						order.addLine(line);
 				}
-			} else {
-				OrderLine orderLine = new OrderLine();
-				try {
-					orderLine.setBeer(beer);
-					orderLine.setQuantity(quantity);
-					order.addLine(orderLine);
-					this.view.showSuccess("Article ajouté au panier");
-				} catch (BeanException e) {
-					this.view.showError(e.getMessage());
-				}
-				
+				this.view.showSuccess("Article ajouté au panier");
+			} catch (BeanException e) {
+				this.view.showError(e.getMessage());
 			}
 		}
 	}
@@ -76,7 +70,7 @@ public class ClientCatalogControler {
 	}
 	
 	public void updateTable() {
-		this.beers = beerDao.findAll();
+		this.beers = beerDao.findAllWithStock();
 		this.beerTableModel.update(beers);
 	}
 }

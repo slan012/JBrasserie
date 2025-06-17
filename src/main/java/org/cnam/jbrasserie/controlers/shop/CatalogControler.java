@@ -48,7 +48,6 @@ public class CatalogControler{
 			this.catalogView.setTextFieldsState(isNewBeer);
 			this.catalogView.setDeleteButtonState(false);
 			this.catalogView.setUpdateButtonState(false);
-//			this.catalogView.clearMessage();
 			updateTable();
 			CatalogNotifier.catalogUpdated();
 		} catch (FormException e){
@@ -87,7 +86,7 @@ public class CatalogControler{
 		}
 	}
 	
-	private void updateTable() {
+	public void updateTable() {
 		this.editedBeer = null;
 		this.beerList = beerDao.findAll();
 		this.beerTableModel.update(beerList);
