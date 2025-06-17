@@ -43,6 +43,30 @@ public class BeerDaoImplDb implements BeerDao{
 		return beerList;
 	}
 	
+	@Override
+	public List<Beer> findAllWithStock() {
+		//TEST OK
+		String query = "SELECT * FROM beer WHERE stock > 0";
+		
+		List<Beer> beerList = new ArrayList<Beer>();
+
+		try (Connection connection = DBConnection.getConnection();
+			 Statement statement = connection.createStatement();){
+			
+			ResultSet results = statement.executeQuery(query);
+			
+			while(results.next()) {
+				Beer beer = new Beer();
+				beer = getBeerFromResultSet(results, beer);
+				beerList.add(beer);
+			}
+		} catch (SQLException e) {
+			System.err.print("SQL request error : ");
+			e.printStackTrace();
+		}
+		return beerList;
+	}
+	
 	/**
 	 * Retrieves a beer from the database by its ID.
 	 *

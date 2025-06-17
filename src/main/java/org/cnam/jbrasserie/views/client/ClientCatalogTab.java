@@ -60,7 +60,7 @@ public class ClientCatalogTab extends JPanel implements CatalogObserver{
 		this.quantitySpinner = new JSpinner(new SpinnerNumberModel(1,1, null, 1));
 		this.quantitySpinner.setPreferredSize(new Dimension(60, 25));
 		this.quantitySpinner.setMaximumSize(new Dimension(60, 25));
-		
+
 		addButton = new JButton(new AbstractAction("Ajouter au panier") {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -69,14 +69,13 @@ public class ClientCatalogTab extends JPanel implements CatalogObserver{
 		});
 
 		addButton.setEnabled(false);
-		
 
 		// Message 
 		
 		this.message = new JLabel(" ");
 
 		// Layout
-	// Add To Basket panel
+		// Add To Basket panel
 		
 		this.addToBasketPanel = new JPanel();
 		GroupLayout gl = new GroupLayout(this.addToBasketPanel);

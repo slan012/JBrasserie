@@ -8,6 +8,7 @@ import java.util.List;
 import org.cnam.jbrasserie.beans.OrderLine;
 import org.cnam.jbrasserie.dao.order.OrderDao;
 import org.cnam.jbrasserie.dao.order.OrderDaoImplDb;
+import org.cnam.jbrasserie.observers.CatalogNotifier;
 import org.cnam.jbrasserie.observers.OrderNotifier;
 import org.cnam.jbrasserie.session.Session;
 import org.cnam.jbrasserie.tablesModels.OrderLinesTableModel;
@@ -30,6 +31,7 @@ public class BasketControler implements PropertyChangeListener {
 			Session.getCurrentOrder().setClient(Session.getCurrentUser());
 			orderDao.insertOrder(Session.getCurrentOrder());
 			OrderNotifier.newOrderSubmitted();
+			CatalogNotifier.catalogUpdated();
 			this.view.showSuccess("Commande validée !");
 			basketTableModel.init();
 			Session.getCurrentOrder().setLines(new ArrayList<>());
@@ -41,7 +43,7 @@ public class BasketControler implements PropertyChangeListener {
 	public void deleteLine() {
 		int selectedLine = view.getSelectedRow();
 		if (selectedLine != -1) {
-			Session.getCurrentOrder().removeLine(selectedLine);;
+			Session.getCurrentOrder().removeLine(selectedLine);
 		}
 	}
 	
