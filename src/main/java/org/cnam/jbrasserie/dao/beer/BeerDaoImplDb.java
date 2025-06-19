@@ -45,7 +45,6 @@ public class BeerDaoImplDb implements BeerDao{
 	
 	@Override
 	public List<Beer> findAllWithStock() {
-		//TEST OK
 		String query = "SELECT * FROM beer WHERE stock > 0";
 		
 		List<Beer> beerList = new ArrayList<Beer>();
@@ -75,7 +74,6 @@ public class BeerDaoImplDb implements BeerDao{
 	 */
 	@Override
 	public Beer findById(int id) {
-		// TEST OK
 		String query = "SELECT * FROM beer WHERE idBeer=?";
 		Beer beer = new Beer();
 		
@@ -105,7 +103,6 @@ public class BeerDaoImplDb implements BeerDao{
 	 */
 	@Override
 	public List<Beer> findByName(String name) {
-		// TEST OK
 		String query = "SELECT * FROM beer WHERE name=?";
 		List<Beer> beerList = new ArrayList<>();
 		
@@ -134,7 +131,6 @@ public class BeerDaoImplDb implements BeerDao{
 	 */
 	@Override
 	public void add(Beer beer) {
-		//TESTS OK
 		int updatedRows = 0;
 		String query = "INSERT INTO beer(name, brewer, style, alcohol, price, stock)"
 				+ "VALUES(?, ?, ?, ?, ?, ?);";
@@ -182,7 +178,6 @@ public class BeerDaoImplDb implements BeerDao{
 	 */
 	@Override
 	public void update(Beer beer) {
-		// TESTS OK
 		int updatedRows = 0;
 		String query = "UPDATE beer "
 					 + "SET name=?, brewer=?, style=?, alcohol=?, price=?, stock=? "

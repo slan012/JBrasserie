@@ -15,10 +15,12 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 
 import org.cnam.jbrasserie.controlers.client.BasketControler;
+import org.cnam.jbrasserie.observers.ClientOrderNotifier;
+import org.cnam.jbrasserie.observers.ClientOrderObserver;
 import org.cnam.jbrasserie.tablesModels.OrderLinesTableModel;
 
 @SuppressWarnings("serial")
-public class BasketTab extends JPanel {
+public class BasketTab extends JPanel implements ClientOrderObserver{
 	
 	private JTable basketTable;
 	private OrderLinesTableModel basketTableModel;
@@ -37,6 +39,7 @@ public class BasketTab extends JPanel {
 		basketTableModel.init();
 		basketTable = new JTable(basketTableModel);
 		basketControler = new BasketControler(this, basketTableModel);
+		ClientOrderNotifier.addObserver(this);
 		
 		// Table
 		
@@ -133,5 +136,11 @@ public class BasketTab extends JPanel {
 	
 	public void clearMessage() {
 		this.message.setText(" ");
+	}
+
+	@Override
+	public void clientOrdeUpdated() {
+		this.basketControler.updateTable();
+		
 	}
 }

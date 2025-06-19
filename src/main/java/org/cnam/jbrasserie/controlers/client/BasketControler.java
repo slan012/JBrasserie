@@ -14,7 +14,7 @@ import org.cnam.jbrasserie.session.Session;
 import org.cnam.jbrasserie.tablesModels.OrderLinesTableModel;
 import org.cnam.jbrasserie.views.client.BasketTab;
 
-public class BasketControler implements PropertyChangeListener {
+public class BasketControler {
 
 	private BasketTab view;
 	private OrderLinesTableModel basketTableModel;
@@ -23,7 +23,6 @@ public class BasketControler implements PropertyChangeListener {
 	public BasketControler(BasketTab view, OrderLinesTableModel tableModel) {
 		this.view = view;
 		this.basketTableModel = tableModel;
-		Session.getCurrentOrder().addPropertyChangeListener(this);
 	}
 	
 	public void confirmCommand() {
@@ -44,17 +43,19 @@ public class BasketControler implements PropertyChangeListener {
 		int selectedLine = view.getSelectedRow();
 		if (selectedLine != -1) {
 			Session.getCurrentOrder().removeLine(selectedLine);
+			updateTable();
 		}
 	}
 	
 	public void emptyBasket() {
 		Session.getCurrentOrder().setLines(new ArrayList<>());
+		updateTable();
 	}
 
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
+
+	public void updateTable() {
 		boolean buttonsEnabled = false;
-		basketTableModel.update((List<OrderLine>) evt.getNewValue());
+		basketTableModel.update(Session.getCurrentOrder().getLines());
 		if (!Session.getCurrentOrder().getLines().isEmpty()) {
 			buttonsEnabled = true;
 			this.view.clearMessage();

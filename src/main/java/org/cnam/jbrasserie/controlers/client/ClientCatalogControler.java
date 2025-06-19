@@ -7,6 +7,7 @@ import org.cnam.jbrasserie.beans.OrderLine;
 import org.cnam.jbrasserie.dao.beer.BeerDao;
 import org.cnam.jbrasserie.dao.beer.BeerDaoImplDb;
 import org.cnam.jbrasserie.exceptions.BeanException;
+import org.cnam.jbrasserie.observers.ClientOrderNotifier;
 import org.cnam.jbrasserie.session.Session;
 import org.cnam.jbrasserie.tablesModels.ClientBeersTableModel;
 import org.cnam.jbrasserie.views.client.ClientCatalogTab;
@@ -44,6 +45,7 @@ public class ClientCatalogControler {
 						line.setQuantity(quantity);
 						order.addLine(line);
 				}
+				ClientOrderNotifier.clientOrderUpdated();
 				this.view.showSuccess("Article ajouté au panier");
 			} catch (BeanException e) {
 				this.view.showError(e.getMessage());

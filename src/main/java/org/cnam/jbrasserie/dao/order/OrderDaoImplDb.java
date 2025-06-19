@@ -13,6 +13,7 @@ import org.cnam.jbrasserie.beans.Client;
 import org.cnam.jbrasserie.beans.Order;
 import org.cnam.jbrasserie.beans.OrderLine;
 import org.cnam.jbrasserie.database.DBConnection;
+import org.cnam.jbrasserie.exceptions.BeanException;
 
 public class OrderDaoImplDb implements OrderDao{
 
@@ -37,7 +38,11 @@ public class OrderDaoImplDb implements OrderDao{
 			ResultSet results = statement.executeQuery(query);
 			
 			while(results.next()) {
-				orderList.add(builOrder(results));
+				try {
+					orderList.add(buildOrder(results));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		} catch (SQLException e) {
 			System.err.print("SQL request error : ");
@@ -69,7 +74,11 @@ public class OrderDaoImplDb implements OrderDao{
 			ResultSet results = preparedStatement.executeQuery();
 			
 			while(results.next()) {
-				order = builOrder(results);
+				try {
+					order = buildOrder(results);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		} catch (SQLException e) {
 			System.err.print("SQL request error : ");
@@ -100,8 +109,12 @@ public class OrderDaoImplDb implements OrderDao{
 			ResultSet results = preparedStatement.executeQuery();
 			
 			while(results.next()) {
-				Order order = builOrder(results);
-				orderList.add(order);
+				try {
+					Order order = buildOrder(results);
+					orderList.add(order);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		} catch (SQLException e) {
 			System.err.print("SQL request error : ");
@@ -172,7 +185,7 @@ public class OrderDaoImplDb implements OrderDao{
 	}
 
 		
-	private Order builOrder(ResultSet results) {
+	private Order buildOrder(ResultSet results) throws BeanException {
 		Client client = new Client();
 		Order order = new Order();
 		try {

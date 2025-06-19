@@ -6,6 +6,7 @@ import org.cnam.jbrasserie.beans.Client;
 import org.cnam.jbrasserie.beans.Order;
 import org.cnam.jbrasserie.dao.client.ClientDao;
 import org.cnam.jbrasserie.dao.client.ClientDaoImplDb;
+import org.cnam.jbrasserie.exceptions.BeanException;
 import org.cnam.jbrasserie.exceptions.FormException;
 import org.cnam.jbrasserie.observers.ClientNotifier;
 import org.cnam.jbrasserie.session.Session;
@@ -25,7 +26,7 @@ public class ProfileControler {
 		this.clientDao = new ClientDaoImplDb();
 	}
 	
-	public void updateUser() {
+	public void updateUser(){
 		try {
 			this.profileView.clearMessage();
 			editedClient = handleEditedClient();
@@ -34,6 +35,8 @@ public class ProfileControler {
 			profileView.showSuccess("Informations mises à jour");
 		} catch (FormException e) {
 			this.profileView.showError(e.getMessage());
+		} catch (BeanException e) {
+			profileView.showError(e.getMessage());
 		}
 	}
 	
@@ -62,7 +65,7 @@ public class ProfileControler {
 		}
 	}
 	
-	public Client handleEditedClient() throws FormException {
+	public Client handleEditedClient() throws FormException, BeanException {
 		Map<String, String> editedClientRaw = profileView.getEditedClientData();
 		for (Map.Entry<String, String> field : editedClientRaw.entrySet()) {
 			if (!field.getKey().equals("id") && field.getValue().isBlank()) {
@@ -80,7 +83,12 @@ public class ProfileControler {
 			throw new FormException("Le code postal doit être un nombre");
 		}
 		editedClient.setCity(editedClientRaw.get("city"));
-		editedClient.setPhone(editedClientRaw.get("phone"));
+		try {
+			editedClient.setPhone(editedClientRaw.get("phone"));
+			
+		} catch (BeanException e) {
+			throw new BeanException(e.getMessage());
+		}
 		return editedClient;
 	}
 	

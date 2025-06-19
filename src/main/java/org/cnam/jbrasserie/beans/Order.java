@@ -48,22 +48,15 @@ public class Order {
 	}
 	
 	public void setLines(List<OrderLine> lines) {
-		List<OrderLine> oldList = new ArrayList<>(this.lines);
 		this.lines = lines;
-		this.support.firePropertyChange("lines", oldList, lines);
 	}
 	
 	public void addLine(OrderLine line) {
-		List<OrderLine> oldList = new ArrayList<>(this.lines);
 		lines.add(line);
-
-		this.support.firePropertyChange("lines", oldList, lines);
 	}
 	
 	public void removeLine(int lineIndex) {
-		List<OrderLine> oldList = new ArrayList<>(this.lines);
 		lines.remove(lineIndex);
-		this.support.firePropertyChange("lines", oldList, lines);
 	}
 	
 	public double getTotal() {
