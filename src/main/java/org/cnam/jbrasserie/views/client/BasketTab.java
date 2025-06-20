@@ -139,7 +139,7 @@ public class BasketTab extends JPanel implements ClientOrderObserver{
 	}
 
 	@Override
-	public void clientOrdeUpdated() {
+	public void clientOrderUpdated() {
 		this.basketControler.updateTable();
 		
 	}

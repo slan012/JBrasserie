@@ -4,8 +4,8 @@ import java.util.List;
 import org.cnam.jbrasserie.beans.Beer;
 import org.cnam.jbrasserie.beans.Order;
 import org.cnam.jbrasserie.beans.OrderLine;
+import org.cnam.jbrasserie.dao.FactoryDao;
 import org.cnam.jbrasserie.dao.beer.BeerDao;
-import org.cnam.jbrasserie.dao.beer.BeerDaoImplDb;
 import org.cnam.jbrasserie.exceptions.BeanException;
 import org.cnam.jbrasserie.observers.ClientOrderNotifier;
 import org.cnam.jbrasserie.session.Session;
@@ -22,7 +22,7 @@ public class ClientCatalogControler {
 	public ClientCatalogControler(ClientCatalogTab clientCatalogTab, ClientBeersTableModel beerTableModel) {
 		this.view = clientCatalogTab;
 		this.beerTableModel = beerTableModel;
-		this.beerDao = new BeerDaoImplDb();
+		this.beerDao = FactoryDao.getBeerDao();
 		this.updateTable();
 	}
 	
