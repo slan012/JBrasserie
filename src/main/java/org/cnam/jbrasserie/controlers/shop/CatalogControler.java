@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.cnam.jbrasserie.beans.Beer;
+import org.cnam.jbrasserie.dao.FactoryDao;
 import org.cnam.jbrasserie.dao.beer.BeerDao;
-import org.cnam.jbrasserie.dao.beer.BeerDaoImplDb;
 import org.cnam.jbrasserie.exceptions.DaoException;
 import org.cnam.jbrasserie.exceptions.FormException;
 import org.cnam.jbrasserie.observers.CatalogNotifier;
@@ -15,7 +15,7 @@ import org.cnam.jbrasserie.views.shop.CatalogTab;
 public class CatalogControler{
 	
 	CatalogTab catalogView;
-	BeerDao beerDao = new BeerDaoImplDb();
+	BeerDao beerDao = FactoryDao.getBeerDao();
 	Beer selectedBeer;
 	Beer editedBeer;
 	BeersTableModel beerTableModel;

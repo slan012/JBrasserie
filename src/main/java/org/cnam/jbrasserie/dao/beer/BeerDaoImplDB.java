@@ -12,16 +12,11 @@ import org.cnam.jbrasserie.beans.Beer;
 import org.cnam.jbrasserie.database.DBConnection;
 import org.cnam.jbrasserie.exceptions.DaoException;
 
-public class BeerDaoImplDb implements BeerDao{
+public class BeerDaoImplDB implements BeerDao{
 	
-	/**
-	 * Retrieves all beers from the database.
-	 *
-	 * @return a list of all beers available in the database. If no beers are found, an empty list is returned.
-	 */
+
 	@Override
 	public List<Beer> findAll() {
-		//TEST OK
 		String query = "SELECT * FROM beer";
 		
 		List<Beer> beerList = new ArrayList<Beer>();
@@ -43,6 +38,8 @@ public class BeerDaoImplDb implements BeerDao{
 		return beerList;
 	}
 	
+	
+
 	@Override
 	public List<Beer> findAllWithStock() {
 		String query = "SELECT * FROM beer WHERE stock > 0";
@@ -66,12 +63,7 @@ public class BeerDaoImplDb implements BeerDao{
 		return beerList;
 	}
 	
-	/**
-	 * Retrieves a beer from the database by its ID.
-	 *
-	 * @param id the ID of the beer to retrieve.
-	 * @return the beer with the specified ID, or null if no such beer exists.
-	 */
+
 	@Override
 	public Beer findById(int id) {
 		String query = "SELECT * FROM beer WHERE idBeer=?";
@@ -95,12 +87,6 @@ public class BeerDaoImplDb implements BeerDao{
 		return beer;
 	}
 
-	/**
-	 * Retrieves a list of beers from the database by their name.
-	 *
-	 * @param name the name of the beers to retrieve.
-	 * @return a list of beers with the specified name, or an empty list if no such beers exist.
-	 */
 	@Override
 	public List<Beer> findByName(String name) {
 		String query = "SELECT * FROM beer WHERE name=?";
@@ -124,11 +110,6 @@ public class BeerDaoImplDb implements BeerDao{
 		return beerList;
 	}
 
-	/**
-	 * Inserts a new beer into the database.
-	 *
-	 * @param beer the beer to insert.
-	 */
 	@Override
 	public void add(Beer beer) {
 		int updatedRows = 0;
@@ -170,12 +151,6 @@ public class BeerDaoImplDb implements BeerDao{
 		}
 	}
 
-	/**
-	 * Updates an existing beer in the database.
-	 *
-	 * @param id the ID of the beer to update.
-	 * @param beer the updated beer object.
-	 */
 	@Override
 	public void update(Beer beer) {
 		int updatedRows = 0;
@@ -208,11 +183,7 @@ public class BeerDaoImplDb implements BeerDao{
 		}
 	}
 
-	/**
-	 * Deletes a beer from the database by its ID.
-	 *
-	 * @param id the ID of the beer to delete.
-	 */
+
 	@Override
 	public void delete(int id) throws DaoException{
 		int deletedRows = 0;

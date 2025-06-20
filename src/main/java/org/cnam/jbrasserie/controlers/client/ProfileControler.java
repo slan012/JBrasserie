@@ -4,8 +4,8 @@ import java.util.Map;
 
 import org.cnam.jbrasserie.beans.Client;
 import org.cnam.jbrasserie.beans.Order;
+import org.cnam.jbrasserie.dao.FactoryDao;
 import org.cnam.jbrasserie.dao.client.ClientDao;
-import org.cnam.jbrasserie.dao.client.ClientDaoImplDb;
 import org.cnam.jbrasserie.exceptions.BeanException;
 import org.cnam.jbrasserie.exceptions.FormException;
 import org.cnam.jbrasserie.observers.ClientNotifier;
@@ -23,7 +23,7 @@ public class ProfileControler {
 	public ProfileControler(ProfileTab profileView, ClientView clientView) {
 		this.profileView = profileView;
 		this.clientView = clientView;
-		this.clientDao = new ClientDaoImplDb();
+		this.clientDao = FactoryDao.getClientDao();
 	}
 	
 	public void updateUser(){

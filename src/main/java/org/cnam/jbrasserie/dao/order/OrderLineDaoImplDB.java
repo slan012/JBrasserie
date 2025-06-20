@@ -12,7 +12,7 @@ import org.cnam.jbrasserie.beans.Beer;
 import org.cnam.jbrasserie.beans.OrderLine;
 import org.cnam.jbrasserie.database.DBConnection;
 
-public class OrderLineDaoImplDb implements OrderLineDao {
+public class OrderLineDaoImplDB implements OrderLineDao {
 
 	@Override
 	public List<OrderLine> findOrderLineById(Integer idOrder){

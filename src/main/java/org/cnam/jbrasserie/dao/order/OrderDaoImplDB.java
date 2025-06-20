@@ -15,11 +15,10 @@ import org.cnam.jbrasserie.beans.OrderLine;
 import org.cnam.jbrasserie.database.DBConnection;
 import org.cnam.jbrasserie.exceptions.BeanException;
 
-public class OrderDaoImplDb implements OrderDao{
+public class OrderDaoImplDB implements OrderDao{
 
 	@Override
 	public List<Order> findAll() {
-		// TEST OK
 		String query = 
 				  "SELECT c.idOrder , c.idClient, c2.*, `date`, SUM(quantity * b.price) as total "
 				+ "FROM clientorder c "
@@ -54,7 +53,6 @@ public class OrderDaoImplDb implements OrderDao{
 
 	@Override
 	public Order findById(int id) {
-		// TEST OK
 		String query = 
 				  "SELECT c.idOrder , c.idClient, c2.*, `date`, SUM(quantity * b.price) as total "
 				+ "FROM clientorder c "

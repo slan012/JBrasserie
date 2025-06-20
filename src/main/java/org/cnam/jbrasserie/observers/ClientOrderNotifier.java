@@ -15,7 +15,7 @@ public class ClientOrderNotifier {
 	
 	public static void clientOrderUpdated() {
 		for (ClientOrderObserver observer : observers) {
-			observer.clientOrdeUpdated();
+			observer.clientOrderUpdated();
 		}
 	}
 }

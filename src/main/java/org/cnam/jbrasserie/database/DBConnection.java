@@ -3,6 +3,7 @@ package org.cnam.jbrasserie.database;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -29,7 +30,17 @@ public class DBConnection {
 	private static void setDbConfig() {
 
 		Properties prop = new Properties();
-		String propFilePath = new File("src/main/java/org/cnam/jbrasserie/config/config.properties").getAbsolutePath();
+		String propFilePath = Paths.get(
+				"",
+				"src",
+				"main",
+				"java",
+				"org",
+				"cnam",
+				"jbrasserie",
+				"config",
+				"config.properties")
+				.toAbsolutePath().toString();
 		
 		try (FileReader fr = new FileReader(propFilePath);
 			 BufferedReader br = new BufferedReader(fr)){
