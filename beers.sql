@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : ven. 20 juin 2025 à 05:23
+-- Généré le : ven. 20 juin 2025 à 05:27
 -- Version du serveur : 11.7.2-MariaDB
 -- Version de PHP : 8.3.14
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Base de données : `beers`
 --
+CREATE DATABASE IF NOT EXISTS `beers` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci;
+USE `beers`;
 
 -- --------------------------------------------------------
 
