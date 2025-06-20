@@ -4,9 +4,10 @@ import java.util.List;
 import org.cnam.jbrasserie.beans.Beer;
 import org.cnam.jbrasserie.beans.Order;
 import org.cnam.jbrasserie.beans.OrderLine;
+import org.cnam.jbrasserie.dao.FactoryDao;
 import org.cnam.jbrasserie.dao.beer.BeerDao;
-import org.cnam.jbrasserie.dao.beer.BeerDaoImplDb;
 import org.cnam.jbrasserie.exceptions.BeanException;
+import org.cnam.jbrasserie.observers.ClientOrderNotifier;
 import org.cnam.jbrasserie.session.Session;
 import org.cnam.jbrasserie.tablesModels.ClientBeersTableModel;
 import org.cnam.jbrasserie.views.client.ClientCatalogTab;
@@ -21,38 +22,33 @@ public class ClientCatalogControler {
 	public ClientCatalogControler(ClientCatalogTab clientCatalogTab, ClientBeersTableModel beerTableModel) {
 		this.view = clientCatalogTab;
 		this.beerTableModel = beerTableModel;
-		this.beerDao = new BeerDaoImplDb();
+		this.beerDao = FactoryDao.getBeerDao();
 		this.updateTable();
 	}
 	
 	public void addLineToBasket() {
 		int selectedRow = view.getSelectedRow();
+		OrderLine line = null;
 		if (selectedRow != -1) {
 			this.view.clearMessage();
 			int quantity = view.getQuantity();
 			Order order = Session.getCurrentOrder();
-			int beerId = (int) beerTableModel.getValueAt(selectedRow, 0);
 			Beer beer = beerDao.findById((int) beerTableModel.getValueAt(selectedRow, 0));
 			// If beer present in order, add quantity
-			if (isBeerPresent(order, beer)) {
-				OrderLine line = order.getLines().get(beerIndex(order, beer));
-				try {
+			try {
+				if (isBeerPresent(order, beer)) {
+					line = order.getLines().get(beerIndex(order, beer));
 					line.setQuantity(line.getQuantity() + quantity);
-					this.view.showSuccess("Article ajouté au panier");
-				} catch (BeanException e) {
-					this.view.showError(e.getMessage());
+				} else {
+					line = new OrderLine();
+						line.setBeer(beer);
+						line.setQuantity(quantity);
+						order.addLine(line);
 				}
-			} else {
-				OrderLine orderLine = new OrderLine();
-				try {
-					orderLine.setBeer(beer);
-					orderLine.setQuantity(quantity);
-					order.addLine(orderLine);
-					this.view.showSuccess("Article ajouté au panier");
-				} catch (BeanException e) {
-					this.view.showError(e.getMessage());
-				}
-				
+				ClientOrderNotifier.clientOrderUpdated();
+				this.view.showSuccess("Article ajouté au panier");
+			} catch (BeanException e) {
+				this.view.showError(e.getMessage());
 			}
 		}
 	}
@@ -76,7 +72,7 @@ public class ClientCatalogControler {
 	}
 	
 	public void updateTable() {
-		this.beers = beerDao.findAll();
+		this.beers = beerDao.findAllWithStock();
 		this.beerTableModel.update(beers);
 	}
 }

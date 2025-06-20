@@ -6,6 +6,4 @@ import org.cnam.jbrasserie.beans.OrderLine;
 
 public interface OrderLineDao {
 	public List<OrderLine> findOrderLineById(Integer idOrder);
-	public void addLineToOrder(OrderLine line);
-
 }

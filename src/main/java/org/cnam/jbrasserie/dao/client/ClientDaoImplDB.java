@@ -11,17 +11,12 @@ import org.cnam.jbrasserie.beans.Client;
 import org.cnam.jbrasserie.database.DBConnection;
 import org.cnam.jbrasserie.exceptions.DaoException;
 
-public class ClientDaoImplDb implements ClientDao {
+public class ClientDaoImplDB implements ClientDao {
 
-	/**
-	 * Retrieves all clients from the database.
-	 *
-	 * @return a list of all clients available in the database. If no clients are
-	 *         found, an empty list is returned.
-	 */
+
 	@Override
 	public List<Client> findAll() {
-		// TEST OK
+
 		String query = "SELECT * FROM client";
 		List<Client> clientList = new ArrayList<>();
 
@@ -45,7 +40,7 @@ public class ClientDaoImplDb implements ClientDao {
 	
 	@Override
 	public Client findById(int id) {
-		// TEST OK
+
 		String query = "SELECT * FROM client WHERE idClient=?";
 		Client client = new Client();
 
@@ -68,7 +63,7 @@ public class ClientDaoImplDb implements ClientDao {
 
 	@Override
 	public List<Client> findByName(String name) {
-		// TEST OK
+
 		String query = "SELECT * FROM client WHERE lastName=?";
 		List<Client> clientList = new ArrayList<>();
 		
@@ -90,14 +85,10 @@ public class ClientDaoImplDb implements ClientDao {
 		return clientList;
 	}
 
-	/**
-	 * Inserts a new client into the database.
-	 *
-	 * @param client the client to insert.
-	 */
+
 	@Override
 	public void add(Client client) {
-		// TEST OK
+
 		int updatedRows = 0;
 		String query = "INSERT INTO client(firstName, lastName, adress, zipCode, city, phoneNumber)"
 				+ "VALUES(?, ?, ?, ?, ?, ?);";
@@ -138,14 +129,10 @@ public class ClientDaoImplDb implements ClientDao {
 		}
 	}
 
-	/**
-	 * Updates an existing client in the database.
-	 *
-	 * @param client the client to update.
-	 */
+
 	@Override
 	public void update(Client client) {
-		// TEST OK
+
 		int updatedRows = 0;
 		String query = "UPDATE client "
 					 + "SET firstName=?, lastName=?, adress=?, zipCode=?, city=?, phoneNumber=? "

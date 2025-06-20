@@ -22,10 +22,12 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import org.cnam.jbrasserie.beans.Beer;
 import org.cnam.jbrasserie.controlers.shop.CatalogControler;
+import org.cnam.jbrasserie.observers.CatalogNotifier;
+import org.cnam.jbrasserie.observers.CatalogObserver;
 import org.cnam.jbrasserie.tablesModels.BeersTableModel;
 
 @SuppressWarnings("serial")
-public class CatalogTab extends JPanel{
+public class CatalogTab extends JPanel implements CatalogObserver{
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -55,6 +57,7 @@ public class CatalogTab extends JPanel{
 		this.setLayout(new BorderLayout());
 		beerTableModel = new BeersTableModel();
 		this.catalogControler = new CatalogControler(this, beerTableModel);
+		CatalogNotifier.addObserver(this);
 		buildEditPanel();
 		
 		// Beer table
@@ -275,5 +278,10 @@ public class CatalogTab extends JPanel{
 		editPanel.setLayout(gl);
 		gl.setAutoCreateGaps(true);
 		gl.setAutoCreateContainerGaps(true);
+	}
+
+	@Override
+	public void catalogUpdated() {
+		this.catalogControler.updateTable();
 	}
 }

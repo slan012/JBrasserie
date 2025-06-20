@@ -1,5 +1,7 @@
 package org.cnam.jbrasserie.beans;
 
+import org.cnam.jbrasserie.exceptions.BeanException;
+
 public class Client {
 	private Integer id;
 	private String firstName;
@@ -46,8 +48,12 @@ public class Client {
 	public String getPhone() {
 		return phone;
 	}
-	public void setPhone(String phone) {
-		this.phone = phone;
+	public void setPhone(String phone) throws BeanException {
+		if (phone.matches("^[0-9]+$")) {
+			this.phone = phone;
+		} else {
+			throw new BeanException("Le numéro de téléphone doit être un nombre");
+		}
 	}
 
 	public void setId(Integer id) {

@@ -8,16 +8,17 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.cnam.jbrasserie.beans.Beer;
 import org.cnam.jbrasserie.beans.Client;
 import org.cnam.jbrasserie.beans.Order;
 import org.cnam.jbrasserie.beans.OrderLine;
 import org.cnam.jbrasserie.database.DBConnection;
+import org.cnam.jbrasserie.exceptions.BeanException;
 
-public class OrderDaoImplDb implements OrderDao{
+public class OrderDaoImplDB implements OrderDao{
 
 	@Override
 	public List<Order> findAll() {
-		// TEST OK
 		String query = 
 				  "SELECT c.idOrder , c.idClient, c2.*, `date`, SUM(quantity * b.price) as total "
 				+ "FROM clientorder c "
@@ -36,7 +37,11 @@ public class OrderDaoImplDb implements OrderDao{
 			ResultSet results = statement.executeQuery(query);
 			
 			while(results.next()) {
-				orderList.add(builOrder(results));
+				try {
+					orderList.add(buildOrder(results));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		} catch (SQLException e) {
 			System.err.print("SQL request error : ");
@@ -48,7 +53,6 @@ public class OrderDaoImplDb implements OrderDao{
 
 	@Override
 	public Order findById(int id) {
-		// TEST OK
 		String query = 
 				  "SELECT c.idOrder , c.idClient, c2.*, `date`, SUM(quantity * b.price) as total "
 				+ "FROM clientorder c "
@@ -68,7 +72,11 @@ public class OrderDaoImplDb implements OrderDao{
 			ResultSet results = preparedStatement.executeQuery();
 			
 			while(results.next()) {
-				order = builOrder(results);
+				try {
+					order = buildOrder(results);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		} catch (SQLException e) {
 			System.err.print("SQL request error : ");
@@ -99,8 +107,12 @@ public class OrderDaoImplDb implements OrderDao{
 			ResultSet results = preparedStatement.executeQuery();
 			
 			while(results.next()) {
-				Order order = builOrder(results);
-				orderList.add(order);
+				try {
+					Order order = buildOrder(results);
+					orderList.add(order);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		} catch (SQLException e) {
 			System.err.print("SQL request error : ");
@@ -119,9 +131,12 @@ public class OrderDaoImplDb implements OrderDao{
 		
 		String queryLine = "INSERT INTO orderline(idOrder, idBeer, quantity) VALUES(?, ?, ?);";
 		
+		String queryBeer = "update beer b set stock = ( stock - ? ) where b.idBeer = ?;";
+		
 		try(
 			PreparedStatement preparedStatementOrder = connection.prepareStatement(queryOrder, Statement.RETURN_GENERATED_KEYS);
-			PreparedStatement preparedStatementLine = connection.prepareStatement(queryLine, Statement.RETURN_GENERATED_KEYS)){
+			PreparedStatement preparedStatementLine = connection.prepareStatement(queryLine, Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement preparedStatementBeer = connection.prepareStatement(queryBeer, Statement.RETURN_GENERATED_KEYS)){
 			
 			connection.setAutoCommit(false);
 			
@@ -134,21 +149,28 @@ public class OrderDaoImplDb implements OrderDao{
 			if (generatedKeys.next()) {
 				order.setIdOrder(generatedKeys.getInt(1));
 			} else {
-				System.err.print("Inserting beer failed, no Id fetched");
+				System.err.print("Inserting order failed, no Id fetched");
 			}
 			
 			// Insert lines
 			
 			for (OrderLine line : order.getLines()) {
+				Beer beer = line.getBeer();
 				preparedStatementLine.setInt(1, order.getIdOrder());
 				preparedStatementLine.setInt(2, line.getBeer().getId());
 				preparedStatementLine.setInt(3, line.getQuantity());
 				preparedStatementLine.addBatch();
+				
+				preparedStatementBeer.setInt(1, line.getQuantity());
+				preparedStatementBeer.setInt(2, beer.getId());
+				preparedStatementBeer.addBatch();
 			}
 			
 			preparedStatementLine.executeBatch();
+			preparedStatementBeer.executeBatch();
 			connection.commit();
-		
+			System.out.println("Commit ok");
+			
 		}catch (Exception e) {
 			try {
 				connection.rollback();
@@ -161,7 +183,7 @@ public class OrderDaoImplDb implements OrderDao{
 	}
 
 		
-	private Order builOrder(ResultSet results) {
+	private Order buildOrder(ResultSet results) throws BeanException {
 		Client client = new Client();
 		Order order = new Order();
 		try {

@@ -12,7 +12,7 @@ import org.cnam.jbrasserie.beans.Beer;
 import org.cnam.jbrasserie.beans.OrderLine;
 import org.cnam.jbrasserie.database.DBConnection;
 
-public class OrderLineDaoImplDb implements OrderLineDao {
+public class OrderLineDaoImplDB implements OrderLineDao {
 
 	@Override
 	public List<OrderLine> findOrderLineById(Integer idOrder){
@@ -45,8 +45,8 @@ public class OrderLineDaoImplDb implements OrderLineDao {
 				orderLine.setBeer(beer);
 				try {
 					orderLine.setQuantity(results.getInt("quantity"));
-				} catch (Exception ignore) {
-					// Ignore exception
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 				orderLineList.add(orderLine);
 			}
@@ -60,30 +60,6 @@ public class OrderLineDaoImplDb implements OrderLineDao {
 
 	}
 
-	@Override
-	public void addLineToOrder(OrderLine orderLine) {
-		int updatedRows = 0;
-		String query = "INSERT INTO orderline(idOrder, idBeer, quantity) VALUES(?, ?, ?);";
-		
-		try(Connection connection = DBConnection.getConnection();
-			PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)){
-			
-			connection.setAutoCommit(false);
-			
-			preparedStatement.setInt(1, orderLine.getIdOrder());
-			preparedStatement.setInt(2, orderLine.getBeer().getId());
-			preparedStatement.setInt(3, orderLine.getQuantity());
-		
-			updatedRows = preparedStatement.executeUpdate();
-			connection.commit();
-			if (updatedRows == 0) {
-				throw new SQLException("Inserting orderLine failed, no row added");
-			}
-		
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-	}
+	
 
 }

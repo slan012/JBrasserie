@@ -4,8 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.cnam.jbrasserie.beans.Client;
+import org.cnam.jbrasserie.dao.FactoryDao;
 import org.cnam.jbrasserie.dao.client.ClientDao;
-import org.cnam.jbrasserie.dao.client.ClientDaoImplDb;
+import org.cnam.jbrasserie.exceptions.BeanException;
 import org.cnam.jbrasserie.exceptions.DaoException;
 import org.cnam.jbrasserie.exceptions.FormException;
 import org.cnam.jbrasserie.tablesModels.ClientTableModel;
@@ -14,7 +15,7 @@ import org.cnam.jbrasserie.views.shop.ClientTab;
 public class ClientControler {
 
 	ClientTab clientView;
-	ClientDao clientDao = new ClientDaoImplDb();
+	ClientDao clientDao = FactoryDao.getClientDao();
 	Client selectedClient;
 	Client editedClient;
 	ClientTableModel clientTableModel;
@@ -52,6 +53,8 @@ public class ClientControler {
 		} catch (FormException e) {
 			this.clientView.showError(e.getMessage());
 		
+		} catch (BeanException e) {
+			this.clientView.showError(e.getMessage());
 		}
 	}
 
@@ -79,8 +82,8 @@ public class ClientControler {
 			this.clientView.setDeleteButtonState(false);
 			this.clientView.changeUpdateButtonName(true);
 			updateTable();
-		} catch (DaoException | FormException e) {
-			this.clientView.showError("Impossible de supprimer un utilisateur qui a effectué une commande");
+		} catch (DaoException | FormException | BeanException e) {
+			this.clientView.showError("Impossible de supprimer un client qui a effectué une commande");
 		}
 	}
 	
@@ -95,7 +98,7 @@ public class ClientControler {
 		return selectedClient;
 	}
 
-	public Client handleEditedClient() throws FormException {
+	public Client handleEditedClient() throws FormException, BeanException {
 		Map<String, String> editedClientRaw = clientView.getEditedClientData();
 		for (Map.Entry<String, String> field : editedClientRaw.entrySet()) {
 			if (!field.getKey().equals("id") && field.getValue().isBlank()) {
@@ -115,7 +118,11 @@ public class ClientControler {
 			throw new FormException("Le code postal doit être un nombre");
 		}
 		editedClient.setCity(editedClientRaw.get("city"));
-		editedClient.setPhone(editedClientRaw.get("phone"));
+		try {
+			editedClient.setPhone(editedClientRaw.get("phone"));
+		} catch (Exception e) {
+			throw new BeanException(e.getMessage());
+		}
 		return editedClient;
 	}
 }
