@@ -4,10 +4,9 @@ import java.util.List;
 
 import org.cnam.jbrasserie.beans.Order;
 import org.cnam.jbrasserie.beans.OrderLine;
+import org.cnam.jbrasserie.dao.FactoryDao;
 import org.cnam.jbrasserie.dao.order.OrderDao;
-import org.cnam.jbrasserie.dao.order.OrderDaoImplDb;
 import org.cnam.jbrasserie.dao.order.OrderLineDao;
-import org.cnam.jbrasserie.dao.order.OrderLineDaoImplDb;
 import org.cnam.jbrasserie.tablesModels.OrderLinesTableModel;
 import org.cnam.jbrasserie.tablesModels.OrderTableModel;
 import org.cnam.jbrasserie.views.shop.OrderTab;
@@ -15,8 +14,8 @@ import org.cnam.jbrasserie.views.shop.OrderTab;
 public class OrderControler {
 
 	OrderTab orderView;
-	OrderDao orderDao = new OrderDaoImplDb();
-	OrderLineDao orderLineDao = new OrderLineDaoImplDb();
+	OrderDao orderDao = FactoryDao.getOrderDao();
+	OrderLineDao orderLineDao = FactoryDao.getOrderLineDao();
 	private OrderTableModel orderTableModel;
 	private OrderLinesTableModel orderLinesTableModel;
 	List<Order> orders;

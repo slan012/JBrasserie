@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.cnam.jbrasserie.beans.Client;
+import org.cnam.jbrasserie.dao.FactoryDao;
 import org.cnam.jbrasserie.dao.client.ClientDao;
-import org.cnam.jbrasserie.dao.client.ClientDaoImplDb;
 import org.cnam.jbrasserie.exceptions.BeanException;
 import org.cnam.jbrasserie.exceptions.DaoException;
 import org.cnam.jbrasserie.exceptions.FormException;
@@ -15,7 +15,7 @@ import org.cnam.jbrasserie.views.shop.ClientTab;
 public class ClientControler {
 
 	ClientTab clientView;
-	ClientDao clientDao = new ClientDaoImplDb();
+	ClientDao clientDao = FactoryDao.getClientDao();
 	Client selectedClient;
 	Client editedClient;
 	ClientTableModel clientTableModel;
@@ -83,7 +83,7 @@ public class ClientControler {
 			this.clientView.changeUpdateButtonName(true);
 			updateTable();
 		} catch (DaoException | FormException | BeanException e) {
-			this.clientView.showError("Impossible de supprimer un utilisateur qui a effectué une commande");
+			this.clientView.showError("Impossible de supprimer un client qui a effectué une commande");
 		}
 	}
 	

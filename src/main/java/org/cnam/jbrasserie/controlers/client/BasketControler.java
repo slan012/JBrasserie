@@ -1,13 +1,9 @@
 package org.cnam.jbrasserie.controlers.client;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.List;
 
-import org.cnam.jbrasserie.beans.OrderLine;
+import org.cnam.jbrasserie.dao.FactoryDao;
 import org.cnam.jbrasserie.dao.order.OrderDao;
-import org.cnam.jbrasserie.dao.order.OrderDaoImplDb;
 import org.cnam.jbrasserie.observers.CatalogNotifier;
 import org.cnam.jbrasserie.observers.OrderNotifier;
 import org.cnam.jbrasserie.session.Session;
@@ -18,7 +14,7 @@ public class BasketControler {
 
 	private BasketTab view;
 	private OrderLinesTableModel basketTableModel;
-	private OrderDao orderDao = new OrderDaoImplDb();
+	private OrderDao orderDao = FactoryDao.getOrderDao();
 	
 	public BasketControler(BasketTab view, OrderLinesTableModel tableModel) {
 		this.view = view;
@@ -52,7 +48,7 @@ public class BasketControler {
 		updateTable();
 	}
 
-
+	
 	public void updateTable() {
 		boolean buttonsEnabled = false;
 		basketTableModel.update(Session.getCurrentOrder().getLines());
