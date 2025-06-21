@@ -143,6 +143,7 @@ public class ClientTab extends JPanel implements ClientObserver{
 		}
 	}
 	
+	@SuppressWarnings("serial")
 	public void buildEditPanel() {
 		
 		editPanel = new JPanel();

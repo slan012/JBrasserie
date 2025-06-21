@@ -22,7 +22,6 @@ public class DBConnection {
 			connection = DriverManager.getConnection(url, user, password);
 		} catch (SQLException e) {
 			System.err.print("Database connection error, please check database config");
-			e.printStackTrace();
 		}
 		return connection;
 	}

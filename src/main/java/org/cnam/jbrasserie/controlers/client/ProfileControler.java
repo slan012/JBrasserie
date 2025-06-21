@@ -83,12 +83,8 @@ public class ProfileControler {
 			throw new FormException("Le code postal doit être un nombre");
 		}
 		editedClient.setCity(editedClientRaw.get("city"));
-		try {
-			editedClient.setPhone(editedClientRaw.get("phone"));
-			
-		} catch (BeanException e) {
-			throw new BeanException(e.getMessage());
-		}
+		editedClient.setPhone(editedClientRaw.get("phone"));
+
 		return editedClient;
 	}
 	
