@@ -118,11 +118,8 @@ public class ClientControler {
 			throw new FormException("Le code postal doit être un nombre");
 		}
 		editedClient.setCity(editedClientRaw.get("city"));
-		try {
-			editedClient.setPhone(editedClientRaw.get("phone"));
-		} catch (Exception e) {
-			throw new BeanException(e.getMessage());
-		}
+		editedClient.setPhone(editedClientRaw.get("phone"));
+		
 		return editedClient;
 	}
 }

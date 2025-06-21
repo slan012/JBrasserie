@@ -202,7 +202,6 @@ public class ClientDaoImplDB implements ClientDao {
 			client.setCity(results.getString("city"));
 			client.setPhone(results.getString("phoneNumber"));
 		} catch (Exception e) {
-			System.err.print("Error while building client object !");
 			e.printStackTrace();
 		}
 		return client;

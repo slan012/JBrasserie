@@ -1,6 +1,5 @@
 package org.cnam.jbrasserie.beans;
 
-import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Date;
@@ -67,7 +66,4 @@ public class Order {
 		this.total = total;
 	}
 	
-	public void addPropertyChangeListener(PropertyChangeListener listener) {
-		this.support.addPropertyChangeListener(listener);
-	}
 }
