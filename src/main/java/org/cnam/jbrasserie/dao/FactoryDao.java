@@ -15,6 +15,9 @@ import org.cnam.jbrasserie.dao.order.OrderLineDao;
 
 public class FactoryDao {
 	
+	private static Class<?> daoClass = null;
+	private static Constructor<?> constructor = null;
+	
 	private static String getDaoProps() {
 
 		String dao = null;
@@ -36,16 +39,13 @@ public class FactoryDao {
 			is.close();
 			
 		} catch (Exception e) {
-			System.out.print("Fichier DAO properties injoignable");
+			System.out.print("Fichier datasource injoignable");
 			e.printStackTrace();
 		}
 		return dao;
 	}
 
 	public static BeerDao getBeerDao() {
-		
-		Class<?> daoClass = null;
-		Constructor<?> constructor = null;
 		
 		try {
 			daoClass = Class.forName("org.cnam.jbrasserie.dao.beer.BeerDaoImpl" + getDaoProps());
@@ -70,9 +70,6 @@ public class FactoryDao {
 	
 	public static ClientDao getClientDao() {
 		
-		Class<?> daoClass = null;
-		Constructor<?> constructor = null;
-		
 		try {
 			daoClass = Class.forName("org.cnam.jbrasserie.dao.client.ClientDaoImpl" + getDaoProps());
 		} catch (ClassNotFoundException e) {
@@ -96,9 +93,6 @@ public class FactoryDao {
 
 	public static OrderDao getOrderDao() {
 		
-		Class<?> daoClass = null;
-		Constructor<?> constructor = null;
-				
 		try {
 			daoClass = Class.forName("org.cnam.jbrasserie.dao.order.OrderDaoImpl" + getDaoProps());
 		} catch (ClassNotFoundException e) {
@@ -120,11 +114,8 @@ public class FactoryDao {
 		return null;
 	}
 	
-public static OrderLineDao getOrderLineDao() {
+	public static OrderLineDao getOrderLineDao() {
 		
-		Class<?> daoClass = null;
-		Constructor<?> constructor = null;
-				
 		try {
 			daoClass = Class.forName("org.cnam.jbrasserie.dao.order.OrderLineDaoImpl" + getDaoProps());
 		} catch (ClassNotFoundException e) {

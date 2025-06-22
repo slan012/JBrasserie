@@ -15,10 +15,10 @@ import org.cnam.jbrasserie.views.client.ProfileTab;
 
 public class ProfileControler {
 
-	ProfileTab profileView;
-	ClientView clientView;
-	ClientDao clientDao;
-	Client editedClient;
+	private ProfileTab profileView;
+	private ClientView clientView;
+	private ClientDao clientDao;
+	private Client editedClient;
 
 	public ProfileControler(ProfileTab profileView, ClientView clientView) {
 		this.profileView = profileView;

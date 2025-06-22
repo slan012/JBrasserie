@@ -30,6 +30,7 @@ public class BasketControler {
 			this.view.showSuccess("Commande validée !");
 			basketTableModel.init();
 			Session.getCurrentOrder().setLines(new ArrayList<>());
+			updateTable();
 		} else {
 			this.view.showError("Panier vide!");
 		}
