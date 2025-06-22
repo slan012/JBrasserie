@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : ven. 20 juin 2025 à 05:27
+-- Généré le : dim. 22 juin 2025 à 08:30
 -- Version du serveur : 11.7.2-MariaDB
 -- Version de PHP : 8.3.14
 
@@ -39,22 +39,22 @@ CREATE TABLE IF NOT EXISTS `beer` (
   `price` double NOT NULL,
   `stock` int(11) NOT NULL,
   PRIMARY KEY (`idBeer`)
-) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `beer`
 --
 
 INSERT INTO `beer` (`idBeer`, `name`, `brewer`, `style`, `alcohol`, `price`, `stock`) VALUES
-(1, 'Blanche du Mont Blanc', 'Brasserie du Mont Blanc', 'Blanche', 4.6, 3.85, 87),
-(2, 'La Choulette Ambrée', 'Brasserie La Choulette', 'Ambrée', 8, 4, 76),
-(3, 'Page 24 Blonde', 'Brasserie Saint Germain', 'Blonde', 5.9, 4.35, 71),
-(4, 'Bellerose Blonde', 'Brasserie des Sources', 'Blonde IPA', 6.5, 4, 49),
-(5, 'Jenlain Ambrée', 'Brasserie Duyck', 'Ambrée', 7.5, 3.25, 63),
+(1, 'Blanche du Mont Blanc TEST', 'Brasserie du Mont Blanc', 'Blanche', 4.6, 3.8, 81),
+(2, 'La Choulette Ambrée', 'Brasserie La Choulette', 'Ambrée', 8, 4, 65),
+(3, 'Page 24 Blonde', 'Brasserie Saint Germain', 'Blonde', 5.9, 4.35, 60),
+(4, 'Bellerose Blonde', 'Brasserie des Sources', 'Blonde IPA', 6.5, 4, 36),
+(5, 'Jenlain Ambrée', 'Brasserie Duyck', 'Ambrée', 7.5, 3.25, 57),
 (6, 'La Débauche Triple', 'Brasserie La Débauche', 'Triple', 9, 4, 46),
-(7, 'Cuvée des Trolls', 'Brasserie Dubuisson', 'Blonde', 7, 4.1, 83),
-(8, 'La Parisienne Blanche', 'Brasserie La Parisienne', 'Blanche', 5.3, 3, 118),
-(9, 'La Bête', 'Brasserie La Bête', 'Ambrée', 8, 4, 55),
+(7, 'Cuvée des Trolls', 'Brasserie Dubuisson', 'Blonde', 7, 4.1, 78),
+(8, 'La Parisienne Blanche', 'Brasserie La Parisienne', 'Blanche', 5.3, 3, 116),
+(9, 'La Bête', 'Brasserie La Bête', 'Ambrée', 8, 4, 52),
 (10, 'Mont Salève Pale Ale', 'Brasserie du Mont Salève', 'Pale Ale', 5.6, 5.9, 45),
 (11, 'BAPBAP Originale', 'BAPBAP', 'Blonde', 5.8, 4, 100),
 (12, 'Oskare IPA', 'Oskare', 'IPA', 6.8, 4, 95),
@@ -96,7 +96,7 @@ INSERT INTO `beer` (`idBeer`, `name`, `brewer`, `style`, `alcohol`, `price`, `st
 (63, 'La Parisienne IPA', 'Brasserie La Parisienne', 'IPA', 6.5, 4, 90),
 (64, 'Bière test', 'Etienne', 'Blonde', 5.5, 4.56, 30),
 (83, 'Bière test', 'Etienne', 'Blonde', 5.3, 5.87, 20),
-(100, 'Test quantité', 'qsdqsd', 'qsqsdqs', 5, 2, 0);
+(100, 'Test quantité', 'Brasseur', 'Blonde', 5, 2, 0);
 
 -- --------------------------------------------------------
 
@@ -114,7 +114,7 @@ CREATE TABLE IF NOT EXISTS `client` (
   `city` varchar(50) NOT NULL,
   `phoneNumber` varchar(19) NOT NULL,
   PRIMARY KEY (`idClient`)
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `client`
@@ -122,11 +122,11 @@ CREATE TABLE IF NOT EXISTS `client` (
 
 INSERT INTO `client` (`idClient`, `firstName`, `lastName`, `adress`, `zipCode`, `city`, `phoneNumber`) VALUES
 (1, 'Julien', 'Delmas', '200 Rue de Toulouse', 12000, 'Rodez', '0606060606'),
-(2, 'Claire', 'Dupond', '456 Boulevard Saint-Germain', 75000, 'Paris', '0606060606'),
-(3, 'Pierre', 'Johnny TEST', 'Adresse de Pierre', 12330, 'Lyon', '0606484788'),
+(2, 'Claire', 'Dupond Paul', '456 Boulevard Saint-Germain', 75000, 'Paris', '0465465465465'),
+(3, 'Pierre', 'Johnny Paul', 'Adresse de Pierre', 12330, 'Lyon', '0606484788'),
 (4, 'Lucie', 'Bernard', '101 Rue du Faubourg', 13001, 'Marseille', '0648478888'),
-(5, 'Marc', 'Lemoine', '234 Avenue de la République', 33000, 'Bordeaux', '0617654321'),
-(31, 'Etienne', 'LARROUMETS TEST', 'Adresse', 12000, 'VILLE', '0565656565');
+(5, 'Marc', 'Lemoine TEST', '234 Avenue de la République', 33000, 'Bordeaux', '0617654321'),
+(31, 'Etienne', 'LARROUMETS', 'Adresse', 12000, 'VILLE', '0565656565');
 
 -- --------------------------------------------------------
 
@@ -141,7 +141,7 @@ CREATE TABLE IF NOT EXISTS `clientorder` (
   `idClient` int(11) NOT NULL,
   PRIMARY KEY (`idOrder`),
   KEY `Order_Client_FK` (`idClient`)
-) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `clientorder`
@@ -192,7 +192,14 @@ INSERT INTO `clientorder` (`idOrder`, `date`, `idClient`) VALUES
 (65, '2025-06-19', 2),
 (66, '2025-06-19', 2),
 (67, '2025-06-20', 3),
-(68, '2025-06-20', 3);
+(68, '2025-06-20', 3),
+(69, '2025-06-21', 2),
+(70, '2025-06-21', 2),
+(71, '2025-06-21', 2),
+(72, '2025-06-21', 2),
+(73, '2025-06-21', 2),
+(74, '2025-06-21', 2),
+(75, '2025-06-22', 2);
 
 -- --------------------------------------------------------
 
@@ -311,7 +318,20 @@ INSERT INTO `orderline` (`idOrder`, `idBeer`, `quantity`) VALUES
 (67, 16, 9),
 (68, 3, 1),
 (68, 7, 1),
-(68, 20, 2);
+(68, 20, 2),
+(69, 2, 5),
+(69, 3, 5),
+(70, 7, 4),
+(70, 8, 2),
+(70, 9, 2),
+(71, 4, 1),
+(71, 9, 1),
+(72, 4, 12),
+(72, 5, 6),
+(73, 2, 6),
+(73, 3, 6),
+(74, 1, 6),
+(75, 7, 1);
 
 --
 -- Contraintes pour les tables déchargées

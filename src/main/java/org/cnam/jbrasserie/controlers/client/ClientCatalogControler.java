@@ -38,10 +38,20 @@ public class ClientCatalogControler {
 			try {
 				if (isBeerPresent(order, beer)) {
 					line = order.getLines().get(beerIndex(order, beer));
-					line.setQuantity(line.getQuantity() + quantity);
+					int newQuantity = line.getQuantity() + quantity;
+					if (newQuantity > line.getBeer().getStock()) {
+						throw new BeanException("Stock insuffisant");
+					} else {
+						line.setQuantity(newQuantity);
+					}
 				} else {
 					line = new OrderLine();
 						line.setBeer(beer);
+						if (quantity > line.getBeer().getStock()) {
+							throw new BeanException("Stock insuffisant");
+						} else {
+							line.setQuantity(quantity);
+						}
 						line.setQuantity(quantity);
 						order.addLine(line);
 				}

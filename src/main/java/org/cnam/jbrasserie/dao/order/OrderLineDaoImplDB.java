@@ -45,8 +45,8 @@ public class OrderLineDaoImplDB implements OrderLineDao {
 				orderLine.setBeer(beer);
 				try {
 					orderLine.setQuantity(results.getInt("quantity"));
-				} catch (Exception e) {
-					e.printStackTrace();
+				} catch (Exception ignore) {
+					// Do nothing
 				}
 				orderLineList.add(orderLine);
 			}

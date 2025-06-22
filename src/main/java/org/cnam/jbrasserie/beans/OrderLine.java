@@ -27,10 +27,6 @@ public class OrderLine {
 	}
 	
 	public void setQuantity(Integer quantity) throws BeanException {
-		if (this.beer.getStock() >= quantity) {
-			this.quantity = quantity;
-		} else {
-			throw new BeanException("Stock insuffisant !");
-		}
+		this.quantity = quantity;
 	}
 }
