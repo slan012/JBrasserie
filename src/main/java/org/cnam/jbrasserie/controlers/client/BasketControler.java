@@ -42,6 +42,7 @@ public class BasketControler {
 			Session.getCurrentOrder().removeLine(selectedLine);
 			updateTable();
 		}
+		this.view.setDeleteButtonState(false);
 	}
 	
 	public void emptyBasket() {
@@ -58,5 +59,6 @@ public class BasketControler {
 			this.view.clearMessage();
 		}
 		this.view.setButtonsState(buttonsEnabled);
+		this.view.setDeleteButtonState(false);
 	}
 }

@@ -13,6 +13,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import org.cnam.jbrasserie.controlers.client.BasketControler;
 import org.cnam.jbrasserie.observers.ClientOrderNotifier;
@@ -66,6 +68,7 @@ public class BasketTab extends JPanel implements ClientOrderObserver{
 			 });
 		 
 		 this.setButtonsState(false);
+		 this.setDeleteButtonState(false);
 		
 		// Buttons panel
 			
@@ -103,6 +106,16 @@ public class BasketTab extends JPanel implements ClientOrderObserver{
 		
 		this.add(basketScrollPane, BorderLayout.NORTH);
 		this.add(container, BorderLayout.CENTER);
+		
+		basketTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				setDeleteButtonState(true);
+				clearMessage();
+			}
+		});
+		
 	}
 	
 	public int getSelectedRow() {
@@ -115,8 +128,11 @@ public class BasketTab extends JPanel implements ClientOrderObserver{
 	
 	public void setButtonsState(boolean state) {
 		this.submitButton.setEnabled(state);
-		this.deleteButton.setEnabled(state);
 		this.emptyButton.setEnabled(state);
+	}
+	
+	public void setDeleteButtonState(boolean state) {
+		this.deleteButton.setEnabled(state);
 	}
 	
 	public void showError(String message) {
